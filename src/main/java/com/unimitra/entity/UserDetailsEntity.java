@@ -1,4 +1,4 @@
-package com.unimitra.model;
+package com.unimitra.entity;
 
 import java.util.Date;
 
