@@ -3,11 +3,16 @@ package com.unimitra.model;
 import java.util.Date;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class DiscussionModel {
 	private int questionId;
-	String question;
-	Date timestamp;
-	List<AnswerModel> answer;
-	String Status;
+	private String question;
+	private Date timestamp;
+	private List<AnswerModel> answer;
+	private String status;
 	
 }
