@@ -22,9 +22,9 @@ public class UserDetailsEntity {
 	private String emailId;
 	private String userDesignation;
 	private String userType;
-	private String departmentId;
+	private int departmentId;
 	private String reward;
 	private Date creationDateTime;
 	private Date modificationDateTime;
-	private boolean isActive;
+	private boolean isUserActive;
 }

@@ -10,7 +10,7 @@ import lombok.Setter;
 public class QuestionsEntity {
 	
 	private int questionId;
-	private String questionPostedByUserId;
+	private int questionPostedByUserId;
 	private String questionDescription;
 	private String questionCategory;
 	private Date questionCreationDateTime;

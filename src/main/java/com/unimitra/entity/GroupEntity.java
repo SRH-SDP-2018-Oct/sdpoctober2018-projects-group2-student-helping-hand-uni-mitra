@@ -15,7 +15,7 @@ public class GroupEntity {
 	private String groupCreatedBy;
 	private boolean isActive;
 	private Date creationDate;
-	private boolean approvalStatus;
+	private String groupApprovalStatus;
 	private String approvalBy;
 	private String groupCategory;
 }
