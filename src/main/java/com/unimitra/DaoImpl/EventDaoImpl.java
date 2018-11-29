@@ -1,4 +1,4 @@
-package com.unimitra.DaoImpl;
+package com.unimitra.daoImpl;
 
 import java.util.List;
 
