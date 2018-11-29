@@ -9,8 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -32,13 +35,13 @@ public class EventsEntity {
 	@Column(name = "event_charges")
 	private String eventCharges;
 
-	@Column(name = "event_locations")
+	@Column(name = "event_location")
 	private String eventLocation;
 
-	@Column(name = "event_creation_date")
+	@Column(name = "event_creation_time")
 	private Date eventCreationDate;
 
-	@Column(name = "event_modification_date")
+	@Column(name = "event_modification_time")
 	private Date eventModificationDate;
 
 	@Column(name = "event_createdby")
@@ -47,4 +50,11 @@ public class EventsEntity {
 	@Column(name = "event_date_time")
 	private Date eventDateTime;
 
+	@Override
+	public String toString() {
+		return "EventsEntity [eventId=" + eventId + ", eventName=" + eventName + "]";
+	}
+
+	
+	
 }
