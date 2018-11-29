@@ -15,7 +15,7 @@ public class EventsEntity {
 	private Date eventCreationDate;
 	private Date eventModificationDate;
 	private String eventCategory;
-	private int eventCharges;
+	private String eventCharges;
 	private String eventLocation;
 	private Date eventDateTime;
 	
