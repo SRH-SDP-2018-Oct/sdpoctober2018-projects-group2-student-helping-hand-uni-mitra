@@ -1,4 +1,4 @@
-package com.unimitra.ManagerImpl;
+package com.unimitra.service.impl;
 
 import java.util.List;
 
@@ -9,19 +9,17 @@ import org.springframework.stereotype.Service;
 
 import com.unimitra.dao.EventDao;
 import com.unimitra.entity.EventsEntity;
-import com.unimitra.manager.EventsManager;
-
+import com.unimitra.service.EventsService;
 
 @Service
 @Transactional
-public class EventsManagerImpl implements EventsManager{
-	
+public class EventsServiceImpl implements EventsService {
+
 	@Autowired
 	EventDao eventsDao;
 
 	@Override
 	public List<EventsEntity> getEventDetails() {
-		// TODO Auto-generated method stub
 		return eventsDao.getEventDetails();
 	}
 
