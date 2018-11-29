@@ -13,6 +13,6 @@ public class GroupMemberEntity {
 	private int memberUserId;
 	private int memberGroupId;
 	private Date creationDateTime;
-	private boolean isActive;
+	private boolean isGroupMemberActive;
 
 }

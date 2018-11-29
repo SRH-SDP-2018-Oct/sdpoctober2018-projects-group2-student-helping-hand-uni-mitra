@@ -10,6 +10,6 @@ public class EventsRegisterationEntity {
 	private int eventRegistrationId;
 	private int userId;
 	private int eventId;
-	private boolean eventStatusFlag;
+	private boolean eventIsActive;
 	
 }

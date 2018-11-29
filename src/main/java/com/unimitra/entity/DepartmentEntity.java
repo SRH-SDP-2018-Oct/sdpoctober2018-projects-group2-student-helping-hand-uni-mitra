@@ -9,5 +9,5 @@ public class DepartmentEntity {
 
 	private int departmentId;
 	private String departmentName;
-	private String groupApprovalAuthority;
+	private int groupApprovalAuthorityUserId;
 }
