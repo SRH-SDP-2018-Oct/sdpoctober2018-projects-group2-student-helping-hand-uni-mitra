@@ -28,7 +28,7 @@ public class AnswersEntity {
 	@Column(name = "answer_posted_by_user_id")
 	private String answerPostedByUserId;
 	
-	@Column(name = "answer_descrption")
+	@Column(name = "answer_description")
 	private String answerDescription;
 	
 	@Column(name = "question_id")

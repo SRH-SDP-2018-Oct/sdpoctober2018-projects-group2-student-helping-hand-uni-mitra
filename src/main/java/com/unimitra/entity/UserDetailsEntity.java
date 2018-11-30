@@ -58,8 +58,8 @@ public class UserDetailsEntity {
 	private Date userCreationDateTime;
 	
 	@Column(name = "user_modification_date_time")
-	private Date uesrModificationDateTime;
-	
+	private Date userModificationDateTime;
+
 	@Column(name = "user_is_active")
 	private boolean userIsActive;
 	

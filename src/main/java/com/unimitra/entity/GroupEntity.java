@@ -44,7 +44,8 @@ public class GroupEntity {
 	private String groupApprovalStatus;
 	
 	@Column(name = "group_approval_by_user_id")
-	private String groupApprovalBy;
+	private String groupApprovalByUserId;
+
 	
 	@Column(name = "group_category_id")
 	private String groupCategoryId;

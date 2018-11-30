@@ -21,10 +21,11 @@ public class DepartmentEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "dept_id")
-	private int departmentId;
+	private int deptId;
 	
 	@Column(name = "dept_name")
-	private String departmentName;
+	private String deptName;
+
 	
 	//decision pending.
 /*	@Column(name = "group_approval_authority_user_id")
