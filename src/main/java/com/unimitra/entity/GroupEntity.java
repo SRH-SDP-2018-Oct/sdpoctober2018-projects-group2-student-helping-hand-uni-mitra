@@ -2,20 +2,45 @@ package com.unimitra.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
-
+@ToString
+@Entity
+@Table(name = "groups")
 public class GroupEntity {
+	
+	@Column(name = "group_id")
 	private int groupId;
+	
+	@Column(name = "group_name")
 	private String groupName;
+	
+	@Column(name = "group_description")
 	private String groupDescription;
-	private String groupCreatedBy;
-	private boolean isActive;
-	private Date creationDate;
+	
+	@Column(name = "group_created_by_user_id")
+	private String groupCreatedByUserId;
+	
+	@Column(name = "group_creation_date_time")
+	private Date groupCreationDatetime;
+	
+	@Column(name = "group_is_active")
+	private boolean groupIsActive;
+	
+	@Column(name = "group_approval_status")
 	private String groupApprovalStatus;
-	private String approvalBy;
-	private String groupCategory;
+	
+	@Column(name = "group_approval_by")
+	private String groupApprovalBy;
+	
+	@Column(name = "group_category_id")
+	private String groupCategoryId;
 }

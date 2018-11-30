@@ -43,7 +43,7 @@ public class EventsEntity {
 	@Column(name = "event_modification_time")
 	private Date eventModificationDate;
 
-	@Column(name = "event_createdby")
+	@Column(name = "event_created_by_user_id")
 	private int eventCreatedbyUserId;
 
 	@Column(name = "event_date_time")
