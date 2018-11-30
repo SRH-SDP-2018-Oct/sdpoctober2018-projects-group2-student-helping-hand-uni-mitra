@@ -4,6 +4,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.EqualsAndHashCode;
@@ -19,6 +22,8 @@ import lombok.ToString;
 @Table(name = "user_details")
 public class UserDetailsEntity {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "user_id")
 	private int userId;
 	
@@ -52,8 +57,8 @@ public class UserDetailsEntity {
 	@Column(name = "user_creation_date_time")
 	private Date userCreationDateTime;
 	
-	@Column(name = "uesr_modification_date_time")
-	private Date uesrModificationDateTime;
+	@Column(name = "user_modification_date_time")
+	private Date userModificationDateTime;
 	
 	@Column(name = "user_is_active")
 	private boolean userIsActive;

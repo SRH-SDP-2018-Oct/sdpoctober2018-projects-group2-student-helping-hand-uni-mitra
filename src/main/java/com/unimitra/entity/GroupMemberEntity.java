@@ -4,6 +4,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -18,6 +21,8 @@ import lombok.ToString;
 
 public class GroupMemberEntity {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "group_member_id")
 	private int groupMemberId;
 	
@@ -30,7 +35,7 @@ public class GroupMemberEntity {
 	@Column(name = "group_creation_date_time")
 	private Date groupCreationDateTime;
 	
-	@Column(name = "is_group_member_active")
-	private boolean isGroupMemberActive;
+	@Column(name = "group_member_is_active")
+	private boolean groupMemberIsActive;
 
 }

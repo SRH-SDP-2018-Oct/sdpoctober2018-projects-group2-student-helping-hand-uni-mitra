@@ -28,7 +28,7 @@ public class AnswersEntity {
 	@Column(name = "answer_posted_by_user_id")
 	private String answerPostedByUserId;
 	
-	@Column(name = "answer_descrption")
+	@Column(name = "answer_description")
 	private String answerDescription;
 	
 	@Column(name = "question_id")
@@ -39,5 +39,8 @@ public class AnswersEntity {
 	
 	@Column(name = "answer_is_active")
 	private String answerIsActive;
+	
+	@Column(name = "answer_status")
+	private String answerStatus;
 		
 }

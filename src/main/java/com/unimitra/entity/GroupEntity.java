@@ -4,6 +4,9 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -17,6 +20,8 @@ import lombok.ToString;
 @Table(name = "groups")
 public class GroupEntity {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "group_id")
 	private int groupId;
 	
@@ -38,8 +43,8 @@ public class GroupEntity {
 	@Column(name = "group_approval_status")
 	private String groupApprovalStatus;
 	
-	@Column(name = "group_approval_by")
-	private String groupApprovalBy;
+	@Column(name = "group_approval_by_user_id")
+	private String groupApprovalByUserId;
 	
 	@Column(name = "group_category_id")
 	private String groupCategoryId;
