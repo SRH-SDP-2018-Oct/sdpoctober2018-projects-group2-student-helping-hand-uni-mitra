@@ -25,6 +25,7 @@ public class DepartmentEntity {
 	
 	@Column(name = "dept_name")
 	private String deptName;
+
 	
 	//decision pending.
 /*	@Column(name = "group_approval_authority_user_id")

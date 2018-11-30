@@ -59,7 +59,7 @@ public class UserDetailsEntity {
 	
 	@Column(name = "user_modification_date_time")
 	private Date userModificationDateTime;
-	
+
 	@Column(name = "user_is_active")
 	private boolean userIsActive;
 	
