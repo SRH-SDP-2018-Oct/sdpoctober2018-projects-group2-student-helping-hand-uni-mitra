@@ -19,7 +19,8 @@ import lombok.ToString;
 
 public class EventsRegisterationEntity {
 
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "event_registration_id")
 	private int eventRegistrationId;
 	

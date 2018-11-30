@@ -20,10 +20,10 @@ public class DepartmentEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "department_id")
+	@Column(name = "dept_id")
 	private int departmentId;
 	
-	@Column(name = "department_name")
+	@Column(name = "dept_name")
 	private String departmentName;
 	
 	//decision pending.

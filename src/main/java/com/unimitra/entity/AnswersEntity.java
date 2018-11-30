@@ -39,5 +39,8 @@ public class AnswersEntity {
 	
 	@Column(name = "answer_is_active")
 	private String answerIsActive;
+	
+	@Column(name = "answer_status")
+	private String answerStatus;
 		
 }
