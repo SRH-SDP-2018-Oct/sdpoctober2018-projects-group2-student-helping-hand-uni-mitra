@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+	<Properties>
+		<Property name="basePath">./logs</Property>
+	</Properties>
+
+	<Appenders>
+		<RollingFile name="fileLogger"
+			fileName="${basePath}/unimitra.log"
+			filePattern="${basePath}/unimitra-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-mm-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+		</RollingFile>
+
+		<RollingFile name="unimitraError"
+			fileName="${basePath}/unimitraError.err"
+			filePattern="${basePath}/unimitra-error-%d{yyyy-MM-dd}.err">
+			<RegexFilter regex=".*UNIMITRA-ERROR.*" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-mm-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+		</RollingFile>
+
+		<RollingFile name="unimitraAudit"
+			fileName="${basePath}/unimitra-audit.audit"
+			filePattern="${basePath}/unimitra-audit-%d{yyyy-MM-dd}.audit">
+			<RegexFilter regex=".*UNIMITRA-AUDIT.*" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-mm-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+		</RollingFile>
+
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="[%-5level] %d{yyyy-mm-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.unimitra" level="info" additivity="true">
+			<appender-ref ref="unimitraError" level="info" />
+			<appender-ref ref="unimitraAudit" level="info" />
+		</Logger>
+		<Root level="info" additivity="false">
+			<appender-ref ref="console" />
+			<appender-ref ref="fileLogger" level="debug" />
+		</Root>
+	</Loggers>
+</Configuration>
