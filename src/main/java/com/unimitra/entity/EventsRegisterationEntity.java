@@ -2,6 +2,9 @@ package com.unimitra.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -20,14 +23,14 @@ public class EventsRegisterationEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "event_registration_id")
 	private int eventRegistrationId;
-	
+
 	@Column(name = "user_id")
 	private int userId;
-	
+
 	@Column(name = "event_id")
 	private int eventId;
 
 	@Column(name = "event_is_active")
 	private boolean eventIsActive;
-	
+
 }
