@@ -26,7 +26,7 @@ public class EventController {
 	@Autowired
 	EventsService eventsService;
 
-	@GetMapping("/get-details")
+	@GetMapping("/get-all-details")
 	public List<EventsEntity> getAllEventDetails() {
 		List<EventsEntity> eventList = eventsService.getEventDetails();
 		LOGGER.info("UNIMITRA-AUDIT " + eventList.toString());
