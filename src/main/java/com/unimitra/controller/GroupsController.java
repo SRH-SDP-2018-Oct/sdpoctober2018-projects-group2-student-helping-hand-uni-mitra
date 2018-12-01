@@ -25,12 +25,12 @@ public class GroupsController {
 	@GetMapping("/search")
 	public List<GroupModel> getListOfGroups(@RequestParam(required = false) String groupName,
 			@RequestParam(required = false) String category) {
-		return new ArrayList<GroupModel>();
+		return new ArrayList<>();
 	}
 
 	@GetMapping("/pending-requests")
 	public List<GroupModel> getPendingGroupCreationRequests(@RequestParam(required = false) int userId) {
-		return new ArrayList<GroupModel>();
+		return new ArrayList<>();
 	}
 
 	@PostMapping("/decide-approval")

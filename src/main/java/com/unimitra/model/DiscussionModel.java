@@ -11,8 +11,11 @@ import lombok.Setter;
 public class DiscussionModel {
 	private int questionId;
 	private String question;
+	private String userName;
+	private String userId;
 	private Date timestamp;
 	private List<AnswerModel> answer;
 	private String status;
+
 	
 }
