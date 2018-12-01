@@ -1,6 +1,7 @@
 package com.unimitra.controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unimitra.model.AnswerModel;
 import com.unimitra.model.DiscussionModel;
 
 @RestController
@@ -20,7 +22,7 @@ public class QuestionController {
 	}
 
 	@PostMapping("/answer-question")
-	public String answerQuestions(@RequestBody DiscussionModel answer) {
+	public String answerQuestions(@RequestBody AnswerModel answer) {
 		return "Answered Successfully";
 	}
 
@@ -35,4 +37,9 @@ public class QuestionController {
 		return "Closed Successfully";
 	}
 
+	@GetMapping("/search")
+	public String detailedSearch(@RequestParam String searchString, @RequestParam String category,
+			@RequestParam String groupName, @RequestParam int userId) {
+		return "Closed Successfully";
+	}
 }

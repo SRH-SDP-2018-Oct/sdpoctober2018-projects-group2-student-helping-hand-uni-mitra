@@ -9,7 +9,9 @@ import lombok.Setter;
 @Setter
 public class AnswerModel {
 	int answerId;
+	String answer;
 	String userName;
+	int userId;
 	Date time;
 	String designation;
 	

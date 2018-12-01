@@ -7,11 +7,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unimitra.entity.EventsEntity;
+import com.unimitra.model.EventsModel;
 import com.unimitra.service.EventsService;
 
 @RestController
@@ -23,10 +27,26 @@ public class EventController {
 	EventsService eventsService;
 
 	@GetMapping("/get-details")
-	public List<EventsEntity> getEventDetails() {
+	public List<EventsEntity> getAllEventDetails() {
 		List<EventsEntity> eventList = eventsService.getEventDetails();
 		LOGGER.info("UNIMITRA-AUDIT " + eventList.toString());
 		return ObjectUtils.isEmpty(eventList) ? new ArrayList<>() : eventList;
+	}
+
+	@GetMapping("/get-details")
+	public EventsModel getEventDetail(@RequestParam int eventId) {
+		return null;
+	}
+
+	@DeleteMapping("/delete")
+	public String deleteEvent(@RequestParam int eventId) {
+		return "";
+	}
+
+	@PostMapping("/register")
+	public String deleteEvent(@RequestParam int eventId, @RequestParam boolean eventRegistrationFlag,
+			@RequestParam int userId) {
+		return "";
 	}
 
 }
