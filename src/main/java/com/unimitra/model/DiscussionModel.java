@@ -13,9 +13,9 @@ public class DiscussionModel {
 	private String question;
 	private String userName;
 	private String userId;
+	private String questionDescription;
 	private Date timestamp;
 	private List<AnswerModel> answer;
 	private String status;
 
-	
 }
