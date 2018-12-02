@@ -16,7 +16,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-//@EqualsAndHashCode
 @ToString
 @Entity
 @Table(name = "user_details")
