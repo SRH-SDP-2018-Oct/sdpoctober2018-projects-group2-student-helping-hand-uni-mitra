@@ -11,4 +11,12 @@ public interface EventsService {
 
 	List<EventsEntity> getEventDetails();
 
+	EventsEntity getEventDetailById(int eventId);
+
+	String deleteEventById(int eventId);
+
+	EventsEntity postEvent(EventsEntity postEvent);
+
+	//String registerForEvent(int eventId, int userId, boolean eventRegistrationFlag);
+
 }

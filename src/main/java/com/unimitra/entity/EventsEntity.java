@@ -1,5 +1,6 @@
 package com.unimitra.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -38,15 +39,18 @@ public class EventsEntity {
 	private String eventLocation;
 
 	@Column(name = "event_creation_time")
-	private Date eventCreationDate;
+	private Timestamp eventCreationDate;
 
 	@Column(name = "event_modification_time")
-	private Date eventModificationDate;
+	private Timestamp eventModificationDate;
 
 	@Column(name = "event_created_by_user_id")
 	private int eventCreatedbyUserId;
 
 	@Column(name = "event_date_time")
-	private Date eventDateTime;
+	private Timestamp eventDateTime;
+
+	@Column(name = "event_is_active")
+	private boolean eventIsActive;
 
 }
