@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unimitra.entity.EventsEntity;
-import com.unimitra.model.EventsModel;
 import com.unimitra.service.EventsService;
 
 @RestController
@@ -38,29 +35,20 @@ public class EventController {
 
 	@GetMapping("/get-details-by-id")
 	public EventsEntity getEventDetail(@RequestParam int eventId) {
-		EventsEntity eventDetailById = eventsService.getEventDetailById(eventId);
-		return eventDetailById;
+		 return eventsService.getEventDetailById(eventId);
+		
 	}
 
 	@DeleteMapping("/delete")
 	public String deleteEvent(@RequestParam int eventId) {
-		String deleteEventById = eventsService.deleteEventById(eventId);
-		return deleteEventById;
+		return eventsService.deleteEventById(eventId);
+		
 	}
 
 	@PostMapping("/postEvent")
 	public EventsEntity postEvent(@RequestBody EventsEntity postEvent) {
-		EventsEntity postEventDetails = eventsService.postEvent(postEvent);
+		return eventsService.postEvent(postEvent);
 
-		return postEventDetails;
-	}
-
-	/*@PostMapping("/register")
-	public String deleteEvent(@RequestParam int eventId, @RequestParam int userId,
-
-			@RequestParam boolean eventRegistrationFlag) {
-		String eventDetails = eventsService.registerForEvent(eventId, userId, eventRegistrationFlag);
-		return "";
-	}*/
-
+		}
+	
 }

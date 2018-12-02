@@ -22,7 +22,7 @@ import lombok.ToString;
 public class GroupMemberEntity {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "group_member_id")
 	private int groupMemberId;
 	
