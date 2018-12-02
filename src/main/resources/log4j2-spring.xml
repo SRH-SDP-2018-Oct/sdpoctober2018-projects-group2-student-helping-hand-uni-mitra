@@ -9,7 +9,7 @@
 			fileName="${basePath}/unimitra.log"
 			filePattern="${basePath}/unimitra-%d{yyyy-MM-dd}.log">
 			<PatternLayout>
-				<pattern>[%-5level] %d{yyyy-mm-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
 				</pattern>
 			</PatternLayout>
 			<Policies>
