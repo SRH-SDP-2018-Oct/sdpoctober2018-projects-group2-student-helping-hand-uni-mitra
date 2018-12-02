@@ -20,7 +20,7 @@ import lombok.ToString;
 public class EventsRegisterationEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "event_registration_id")
 	private int eventRegistrationId;
 
@@ -30,7 +30,7 @@ public class EventsRegisterationEntity {
 	@Column(name = "event_id")
 	private int eventId;
 
-	@Column(name = "event_is_active")
-	private boolean eventIsActive;
+	@Column(name = "event_registation_flag")
+	private boolean eventRegistrationFlag;
 
 }

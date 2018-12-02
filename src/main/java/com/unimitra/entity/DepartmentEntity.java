@@ -19,7 +19,7 @@ import lombok.ToString;
 public class DepartmentEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "dept_id")
 	private int deptId;
 	

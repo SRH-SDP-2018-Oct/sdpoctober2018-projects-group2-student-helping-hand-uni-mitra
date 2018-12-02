@@ -10,7 +10,6 @@ import org.springframework.util.ObjectUtils;
 
 import com.unimitra.dao.EventDao;
 import com.unimitra.entity.EventsEntity;
-import com.unimitra.entity.EventsRegisterationEntity;
 
 @Repository
 public class EventDaoImpl implements EventDao {
@@ -27,8 +26,8 @@ public class EventDaoImpl implements EventDao {
 	@Override
 	public EventsEntity getEventDetailById(int eventId) {
 		Session session = sessionFactory.getCurrentSession();
-		EventsEntity eventDetailsById = session.get(EventsEntity.class, eventId);
-		return eventDetailsById;
+		return session.get(EventsEntity.class, eventId);
+		
 	}
 
 	@Override
@@ -51,14 +50,6 @@ public class EventDaoImpl implements EventDao {
 		return postEvent;
 	}
 
-/*	@Override
-	public String registerForEvent(int eventId, int userId, boolean eventRegistrationFlag) {
-		Session session = sessionFactory.getCurrentSession();
-		EventsRegisterationEntity eventRegistrationByUserid = session.createQuery("select e.eventId, u.userId from UserDetailsEntity u"
-				+ "RIGHT JION e.EventsEntity");
-		return null;
-	}
-	*/
 	@Autowired
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;

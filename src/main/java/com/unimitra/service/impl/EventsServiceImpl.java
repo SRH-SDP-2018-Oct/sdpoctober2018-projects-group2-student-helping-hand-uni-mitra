@@ -3,11 +3,9 @@ package com.unimitra.service.impl;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.crypto.spec.PSource;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.ParsedSql;
 import org.springframework.stereotype.Service;
 
 import com.unimitra.dao.EventDao;
@@ -33,9 +31,9 @@ public class EventsServiceImpl implements EventsService {
 
 	@Override
 	public String deleteEventById(int eventId) {
-		String deleteEventbyId = eventsDao.deleteEventById(eventId);
+		return eventsDao.deleteEventById(eventId);
 
-		return deleteEventbyId;
+		
 
 	}
 
@@ -45,17 +43,7 @@ public class EventsServiceImpl implements EventsService {
 		postEvent.setEventCreationDate(time);
 		postEvent.setEventCreationDate(time);
 		postEvent = eventsDao.postEvent(postEvent);
-		
 		return postEvent;
 	}
-
-/*	@Override
-	public String registerForEvent(int eventId, int userId, boolean eventRegistrationFlag) {
-		
-		
-		String eventRegitrationFlag = eventsDao.registerForEvent(eventId, userId, eventRegistrationFlag);
-		
-		return eventRegitrationFlag;
-	}*/
 
 }
