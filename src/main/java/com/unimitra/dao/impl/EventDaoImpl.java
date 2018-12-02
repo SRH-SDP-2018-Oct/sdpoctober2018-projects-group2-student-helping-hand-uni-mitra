@@ -20,7 +20,7 @@ public class EventDaoImpl implements EventDao {
 	@Override
 	public List<EventsEntity> getEventDetails() {
 		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("from EventsEntity").list();
+		return session.createQuery("from EventsEntity e order by e.eventCreationDate desc").setMaxResults(10).list();
 	}
 
 	@Override
