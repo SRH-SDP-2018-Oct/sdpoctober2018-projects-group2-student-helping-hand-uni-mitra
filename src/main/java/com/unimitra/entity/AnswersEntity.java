@@ -38,7 +38,7 @@ public class AnswersEntity {
 	private Date answerDateTime;
 	
 	@Column(name = "answer_is_active")
-	private String answerIsActive;
+	private boolean answerIsActive;
 	
 	@Column(name = "answer_status")
 	private String answerStatus;
