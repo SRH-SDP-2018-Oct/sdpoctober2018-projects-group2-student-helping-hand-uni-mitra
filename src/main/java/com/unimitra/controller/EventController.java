@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unimitra.entity.EventsEntity;
+import com.unimitra.entity.EventsRegisterationEntity;
 import com.unimitra.service.EventsService;
 
 @RestController
@@ -50,5 +51,12 @@ public class EventController {
 		return eventsService.postEvent(postEvent);
 
 		}
+	
+	@PostMapping("/registerForEvent")
+	public String registerForEvent(@RequestBody EventsRegisterationEntity registerForEvent) {
+		eventsService.registrationForEvent(registerForEvent);
+		return "200";
+	
+	}
 	
 }

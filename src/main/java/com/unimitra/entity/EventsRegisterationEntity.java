@@ -30,7 +30,7 @@ public class EventsRegisterationEntity {
 	@Column(name = "event_id")
 	private int eventId;
 
-	@Column(name = "event_registation_flag")
+	@Column(name = "event_registration_flag")
 	private boolean eventRegistrationFlag;
 
 }
