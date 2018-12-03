@@ -1,5 +1,6 @@
 package com.unimitra.dao.impl;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -10,6 +11,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.unimitra.dao.EventDao;
 import com.unimitra.entity.EventsEntity;
+import com.unimitra.entity.EventsRegisterationEntity;
 
 @Repository
 public class EventDaoImpl implements EventDao {
@@ -19,15 +21,19 @@ public class EventDaoImpl implements EventDao {
 
 	@Override
 	public List<EventsEntity> getEventDetails() {
+		Timestamp time = new Timestamp(System.currentTimeMillis());
 		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("from EventsEntity e order by e.eventCreationDate desc").setMaxResults(10).list();
+		return session
+				.createQuery(
+						"from EventsEntity e where event_date_time >= '" + time + "'order by e.eventCreationDate desc")
+				.list();
 	}
 
 	@Override
 	public EventsEntity getEventDetailById(int eventId) {
 		Session session = sessionFactory.getCurrentSession();
 		return session.get(EventsEntity.class, eventId);
-		
+
 	}
 
 	@Override
@@ -48,6 +54,14 @@ public class EventDaoImpl implements EventDao {
 		Session session = sessionFactory.getCurrentSession();
 		session.save(postEvent);
 		return postEvent;
+	}
+
+	@Override
+	public EventsRegisterationEntity getUserEventMapping(int userId, int eventId) {
+		Session session = sessionFactory.getCurrentSession();
+		return (EventsRegisterationEntity) session
+				.createQuery(" select  u.userId, e.eventID from UserDetailsEntity u" + "INNER JOIN u.EventsEntity e");
+
 	}
 
 	@Autowired

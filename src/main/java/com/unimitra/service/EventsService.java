@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.unimitra.entity.EventsEntity;
+import com.unimitra.entity.EventsRegisterationEntity;
 
 @Service
 public interface EventsService {
@@ -17,6 +18,6 @@ public interface EventsService {
 
 	EventsEntity postEvent(EventsEntity postEvent);
 
-	//String registerForEvent(int eventId, int userId, boolean eventRegistrationFlag);
+	String registrationForEvent(EventsRegisterationEntity registerForEvent);
 
 }
