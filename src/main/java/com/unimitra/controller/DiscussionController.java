@@ -1,5 +1,7 @@
 package com.unimitra.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,14 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unimitra.model.AnswerModel;
 import com.unimitra.model.DiscussionModel;
+import com.unimitra.service.DiscussionService;
 
 @RestController
-@RequestMapping("/questions")
-public class QuestionController {
+@RequestMapping("/discussion")
+public class DiscussionController {
+
+@Autowired
+DiscussionService discussionService;
 
 	@PostMapping("/post-question")
-	public String postQuestions(@RequestBody DiscussionModel question) {
-		return "Posted Successfully";
+	public ResponseEntity<String> postQuestions(@RequestBody DiscussionModel question) {
+		return discussionService.postQuestion(question);
 	}
 
 	@PostMapping("/answer-question")
