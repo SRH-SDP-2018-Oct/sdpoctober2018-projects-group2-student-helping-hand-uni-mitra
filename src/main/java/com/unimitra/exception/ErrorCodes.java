@@ -14,5 +14,12 @@ public class ErrorCodes {
 			+ ": Invalid Request or Request Parameters";
 	public static final String USER_NOT_PRESENT = "UM1003 " + HttpStatus.BAD_REQUEST.value()
 	+ ": Given user does not exist";
+	public static final String INVALID_DELETE_DISCUSSION_REQUEST = "UM1004 " + HttpStatus.BAD_REQUEST.value()
+	+ ": Invalid Request";
+	public static final String QUESTION_NOT_PRESENT = "UM1005 " + HttpStatus.BAD_REQUEST.value()
+	+ ": Given question does not exist";
+	public static final String ANSWER_NOT_PRESENT = "UM1005 " + HttpStatus.BAD_REQUEST.value()
+	+ ": Given answer does not exist";
+	
 
 }

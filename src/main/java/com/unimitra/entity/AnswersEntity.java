@@ -1,6 +1,6 @@
 package com.unimitra.entity;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +26,7 @@ public class AnswersEntity {
 	private int answerId;
 	
 	@Column(name = "answer_posted_by_user_id")
-	private String answerPostedByUserId;
+	private int answerPostedByUserId;
 	
 	@Column(name = "answer_description")
 	private String answerDescription;
@@ -35,7 +35,7 @@ public class AnswersEntity {
 	private int questionId;
 	
 	@Column(name = "answer_date_time")
-	private Date answerDateTime;
+	private Timestamp answerDateTime;
 	
 	@Column(name = "answer_is_active")
 	private boolean answerIsActive;
