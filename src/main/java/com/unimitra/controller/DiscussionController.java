@@ -1,5 +1,7 @@
 package com.unimitra.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,27 +11,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.AnswerModel;
 import com.unimitra.model.DiscussionModel;
+import com.unimitra.service.DiscussionService;
 
 @RestController
-@RequestMapping("/questions")
-public class QuestionController {
+@RequestMapping("/discussion")
+public class DiscussionController {
+
+	@Autowired
+	DiscussionService discussionService;
 
 	@PostMapping("/post-question")
-	public String postQuestions(@RequestBody DiscussionModel question) {
-		return "Posted Successfully";
+	public ResponseEntity<String> postQuestions(@RequestBody DiscussionModel question) throws UnimitraException {
+		return discussionService.postQuestion(question);
 	}
 
 	@PostMapping("/answer-question")
-	public String answerQuestions(@RequestBody AnswerModel answer) {
-		return "Answered Successfully";
+	public ResponseEntity<String> answerQuestions(@RequestBody AnswerModel answer) {
+		return discussionService.answerQuestion(answer);
 	}
 
 	@DeleteMapping("/delete")
-	public String deleteQuestionsOrAnswers(@RequestParam(required = false) int questionId,
-			@RequestParam(required = false) int answerId, @RequestParam String userName) {
-		return "Deleted Successfully";
+	public ResponseEntity<String> deleteQuestionsOrAnswers(@RequestParam(required = false) Integer questionId,
+			@RequestParam(required = false) Integer answerId, @RequestParam Integer userId) throws UnimitraException {
+		return discussionService.delete(questionId, answerId, userId);
 	}
 
 	@PutMapping("/close-thread")
