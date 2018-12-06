@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -25,6 +28,11 @@ public class AnswersEntity {
 	@Column(name = "answer_id")
 	private int answerId;
 	
+	@ManyToOne
+	@JoinColumn(name="userId")
+	private UserDetailsEntity userDetailsEntity;
+	
+	
 	@Column(name = "answer_posted_by_user_id")
 	private String answerPostedByUserId;
 	
@@ -42,5 +50,10 @@ public class AnswersEntity {
 	
 	@Column(name = "answer_status")
 	private String answerStatus;
+
+	public AnswersEntity(String answerDescription) {
+		super();
+		this.answerDescription = answerDescription;
+	}
 		
 }
