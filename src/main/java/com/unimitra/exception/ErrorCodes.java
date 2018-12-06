@@ -22,4 +22,10 @@ public class ErrorCodes {
 			+ ": Given answer does not exist";
 	public static final String CATEGORY_NOT_PRESENT = "UM1006 " + HttpStatus.BAD_REQUEST.value()
 			+ ": Given category does not exist";
+	public static final String EVENT_NOT_PRESENT = "UM1007 " + HttpStatus.BAD_REQUEST.value()
+	+ ": There is no upcoming events";
+	public static final String EVENT_NOT_PRESENT_FOR_EVENTID = "UM1008 " + HttpStatus.BAD_REQUEST.value()
+	+ ": There is no event for provided event Id";
+	public static final String MAPPING_NOT_PRESENT_FOR_EVENTID_USERID = "UM1008 " + HttpStatus.BAD_REQUEST.value()
+	+ ": User is not registered for gievn event Id";
 }
