@@ -10,10 +10,10 @@ import lombok.Setter;
 @Setter
 public class DiscussionModel {
 	private int questionId;
+	private String category;
 	private String question;
 	private String userName;
-	private String userId;
-	private String questionDescription;
+	private int userId;
 	private Date timestamp;
 	private List<AnswerModel> answer;
 	private String status;

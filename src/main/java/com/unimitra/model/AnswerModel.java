@@ -1,6 +1,6 @@
 package com.unimitra.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ public class AnswerModel {
 	String answer;
 	String userName;
 	int userId;
-	Date time;
+	Timestamp time;
 	String designation;
-	
+	int questionId;
 }
