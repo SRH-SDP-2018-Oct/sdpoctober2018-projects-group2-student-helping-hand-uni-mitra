@@ -50,7 +50,5 @@ public class EventsEntity {
 
 	@Column(name = "event_is_active")
 	private boolean eventIsActive;
-	
-	
 
 }
