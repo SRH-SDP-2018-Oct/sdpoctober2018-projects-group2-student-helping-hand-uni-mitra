@@ -38,46 +38,25 @@ public class DiscussionDaoImpl implements DiscussionDao {
 	}
 
 	@Override
-	public void deleteQuestion(Integer questionId) {
+	public void deleteQuestion(Integer questionId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
-		QuestionsEntity questionEntity = session.get(QuestionsEntity.class, questionId);
+		QuestionsEntity questionEntity = getQuestionEntity(questionId, session);
 		questionEntity.setQuestionActive(false);
 		session.update(questionEntity);
 	}
 
 	@Override
-	public void deleteAnswer(Integer answerId) {
+	public void deleteAnswer(Integer answerId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
-		AnswersEntity answersEntity = session.get(AnswersEntity.class, answerId);
+		AnswersEntity answersEntity = getAnswersEntity(answerId, session);
 		answersEntity.setAnswerIsActive(false);
 		session.update(answersEntity);
-	}
-
-	@Autowired
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
-	@Override
-	public int getQuestionPosterUserId(Integer questionId) throws UnimitraException {
-		Session session = sessionFactory.getCurrentSession();
-		QuestionsEntity questionEntity = session.get(QuestionsEntity.class, questionId);
-		nullCheckForEntity(questionEntity, ErrorCodes.QUESTION_NOT_PRESENT);
-		return questionEntity.getQuestionPostedByUserId();
-	}
-
-	private void nullCheckForEntity(Object entity, String errorCode) throws UnimitraException {
-		if (ObjectUtils.isEmpty(entity)) {
-			throw new UnimitraException(errorCode);
-		}
 	}
 
 	@Override
 	public int getAnswerPosterUserId(Integer answerId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
-		AnswersEntity answersEntity = session.get(AnswersEntity.class, answerId);
-		nullCheckForEntity(answersEntity, ErrorCodes.ANSWER_NOT_PRESENT);
-		return answersEntity.getAnswerPostedByUserId();
+		return getAnswersEntity(answerId, session).getAnswerPostedByUserId();
 	}
 
 	@Override
@@ -90,7 +69,7 @@ public class DiscussionDaoImpl implements DiscussionDao {
 	}
 
 	@Override
-	public void deletAllAnswersOfQuestion(Integer questionId) {
+	public void deletAllAnswersOfQuestion(Integer questionId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 		CriteriaQuery<AnswersEntity> criteriaQuery = criteriaBuilder.createQuery(AnswersEntity.class);
@@ -106,4 +85,52 @@ public class DiscussionDaoImpl implements DiscussionDao {
 
 	}
 
+	@Override
+	public void closeQuestionThread(int questionId, boolean isDiscussionThreadActive) throws UnimitraException {
+		Session session = sessionFactory.getCurrentSession();
+		QuestionsEntity questionEntity = getQuestionEntity(questionId, session);
+		questionEntity.setDiscussionThreadActive(isDiscussionThreadActive);
+		session.update(questionEntity);
+	}
+
+	@Override
+	public int getQuestionPosterUserId(Integer questionId) throws UnimitraException {
+		Session session = sessionFactory.getCurrentSession();
+		return getQuestionEntity(questionId, session).getQuestionPostedByUserId();
+	}
+
+	@Override
+	public boolean getStatusOfDiscussionThread(int questionId) throws UnimitraException {
+		Session session = sessionFactory.getCurrentSession();
+		return getQuestionEntity(questionId, session).isDiscussionThreadActive();
+	}
+	
+	@Override
+	public boolean getStatusOfQuestionDeletion(int questionId) throws UnimitraException {
+		Session session = sessionFactory.getCurrentSession();
+		return getQuestionEntity(questionId, session).isQuestionActive();
+	}
+
+	private AnswersEntity getAnswersEntity(Integer answerId, Session session) throws UnimitraException {
+		AnswersEntity answersEntity = session.get(AnswersEntity.class, answerId);
+		nullCheckForEntity(answersEntity, ErrorCodes.ANSWER_NOT_PRESENT);
+		return answersEntity;
+	}
+
+	private QuestionsEntity getQuestionEntity(Integer questionId, Session session) throws UnimitraException {
+		QuestionsEntity questionEntity = session.get(QuestionsEntity.class, questionId);
+		nullCheckForEntity(questionEntity, ErrorCodes.QUESTION_NOT_PRESENT);
+		return questionEntity;
+	}
+
+	private void nullCheckForEntity(Object entity, String errorCode) throws UnimitraException {
+		if (ObjectUtils.isEmpty(entity)) {
+			throw new UnimitraException(errorCode);
+		}
+	}
+
+	@Autowired
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 }

@@ -38,13 +38,14 @@ public class DiscussionServiceImpl implements DiscussionService {
 		questionEntity.setQuestionCreationDateTime(new Timestamp(System.currentTimeMillis()));
 		questionEntity.setQuestionDescription(discussionModel.getQuestion().trim());
 		questionEntity.setQuestionActive(true);
+		questionEntity.setDiscussionThreadActive(true);
 		questionEntity.setQuestionPostedByUserId(discussionModel.getUserId());
 		discussionDao.postQuestions(questionEntity);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@Override
-	public ResponseEntity<String> answerQuestion(AnswerModel answerModel) {
+	public ResponseEntity<String> answerQuestion(AnswerModel answerModel) throws UnimitraException {
 		AnswersEntity answersEntity = new AnswersEntity();
 		answersEntity.setAnswerDescription(answerModel.getAnswer().trim());
 		answersEntity.setAnswerIsActive(true);
@@ -52,6 +53,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 		answersEntity.setAnswerPostedByUserId(answerModel.getUserId());
 		answersEntity.setAnswerDateTime(new Timestamp(System.currentTimeMillis()));
 		answersEntity.setAnswerPostedByUserId(answerModel.getUserId());
+		checkIfPostAnswerIsPossible(answerModel.getQuestionId());
 		discussionDao.postAnswers(answersEntity);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
@@ -71,18 +73,16 @@ public class DiscussionServiceImpl implements DiscussionService {
 	@Override
 	public ResponseEntity<String> closeDiscussionThread(DiscussionModel discussionModel) throws UnimitraException {
 		int userId = discussionModel.getUserId();
+		boolean isDiscussionThreadActive = discussionModel.isDiscussionThreadActive();
+		int questionId = discussionModel.getQuestionId();
 		if (isUserStaff(userId)) {
-
+			discussionDao.closeQuestionThread(questionId, isDiscussionThreadActive);
 		}
-
-		// Check if user is admin userDetailsDao
-		// close a thread
-
-		return null;
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
 	private boolean isUserStaff(int userId) throws UnimitraException {
-		return discussionDao.getUserType(userId).equals("staff");
+		return discussionDao.getUserType(userId).equals("Staff");
 	}
 
 	private void deleteAnswerIfAddedByUser(Integer answerId, Integer userId) throws UnimitraException {
@@ -108,6 +108,15 @@ public class DiscussionServiceImpl implements DiscussionService {
 		}
 		if (!(ObjectUtils.isEmpty(questionId)) && !(ObjectUtils.isEmpty(answerId))) {
 			throw new UnimitraException(ErrorCodes.INVALID_DELETE_DISCUSSION_REQUEST);
+		}
+	}
+
+	private void checkIfPostAnswerIsPossible(int questionId) throws UnimitraException {
+		if (!discussionDao.getStatusOfDiscussionThread(questionId)) {
+			throw new UnimitraException(ErrorCodes.QUESTION_THREAD_INACTIVE);
+		}
+		if (!discussionDao.getStatusOfQuestionDeletion(questionId)) {
+			throw new UnimitraException(ErrorCodes.QUESTION_NOT_PRESENT);
 		}
 	}
 

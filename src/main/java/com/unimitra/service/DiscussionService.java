@@ -10,7 +10,7 @@ public interface DiscussionService {
 	
 	public ResponseEntity<String> postQuestion(DiscussionModel discussionModel) throws UnimitraException;
 
-	public ResponseEntity<String> answerQuestion(AnswerModel answerModel);
+	public ResponseEntity<String> answerQuestion(AnswerModel answerModel) throws UnimitraException;
 
 	public ResponseEntity<String> delete(Integer questionId, Integer answerId, Integer userId) throws UnimitraException;
 	

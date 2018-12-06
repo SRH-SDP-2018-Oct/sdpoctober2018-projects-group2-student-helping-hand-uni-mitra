@@ -16,6 +16,7 @@ public class DiscussionModel {
 	private int userId;
 	private Date timestamp;
 	private List<AnswerModel> answer;
-	private String status;
+	private boolean discussionThreadActive;
+	private int groupId;
 
 }

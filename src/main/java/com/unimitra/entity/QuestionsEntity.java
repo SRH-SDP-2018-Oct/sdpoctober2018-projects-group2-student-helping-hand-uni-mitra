@@ -39,5 +39,8 @@ public class QuestionsEntity {
 
 	@Column(name = "question_is_active")
 	private boolean isQuestionActive;
+	
+	@Column(name = "discussion_is_active")
+	private boolean discussionThreadActive;
 
 }

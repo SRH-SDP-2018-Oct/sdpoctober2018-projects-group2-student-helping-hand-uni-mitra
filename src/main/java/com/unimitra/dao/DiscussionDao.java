@@ -10,9 +10,9 @@ public interface DiscussionDao {
 
 	public void postAnswers(AnswersEntity answersEntity);
 
-	public void deleteQuestion(Integer questionId);
+	public void deleteQuestion(Integer questionId) throws UnimitraException;
 
-	public void deleteAnswer(Integer answerId);
+	public void deleteAnswer(Integer answerId) throws UnimitraException;
 
 	public int getQuestionPosterUserId(Integer questionId) throws UnimitraException;
 
@@ -20,6 +20,12 @@ public interface DiscussionDao {
 
 	public String getUserType(int userId) throws UnimitraException;
 
-	public void deletAllAnswersOfQuestion(Integer questionId);
+	public void deletAllAnswersOfQuestion(Integer questionId) throws UnimitraException;
+
+	public void closeQuestionThread(int questionId, boolean isDiscussionThreadActive) throws UnimitraException;
+
+	public boolean getStatusOfDiscussionThread(int questionId) throws UnimitraException;
+
+	boolean getStatusOfQuestionDeletion(int questionId) throws UnimitraException;
 
 }

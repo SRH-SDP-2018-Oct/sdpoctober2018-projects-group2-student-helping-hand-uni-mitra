@@ -22,4 +22,6 @@ public class ErrorCodes {
 			+ ": Given answer does not exist";
 	public static final String CATEGORY_NOT_PRESENT = "UM1006 " + HttpStatus.BAD_REQUEST.value()
 			+ ": Given category does not exist";
+	public static final String QUESTION_THREAD_INACTIVE = "UM1007 " + HttpStatus.BAD_REQUEST.value()
+			+ ": The question thread is inactive so you cannot answer";
 }

@@ -29,7 +29,7 @@ public class DiscussionController {
 	}
 
 	@PostMapping("/answer-question")
-	public ResponseEntity<String> answerQuestions(@RequestBody AnswerModel answer) {
+	public ResponseEntity<String> answerQuestions(@RequestBody AnswerModel answer) throws UnimitraException {
 		return discussionService.answerQuestion(answer);
 	}
 
@@ -40,8 +40,8 @@ public class DiscussionController {
 	}
 
 	@PutMapping("/close-thread")
-	public String closeThread(@RequestBody DiscussionModel question) {
-		return "Closed Successfully";
+	public ResponseEntity<String> closeThread(@RequestBody DiscussionModel discussionModel) throws UnimitraException {
+		return discussionService.closeDiscussionThread(discussionModel);
 	}
 
 	@GetMapping("/search")
