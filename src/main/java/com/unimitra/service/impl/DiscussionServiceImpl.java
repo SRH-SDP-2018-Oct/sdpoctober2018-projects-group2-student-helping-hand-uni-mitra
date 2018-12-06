@@ -12,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.unimitra.dao.CategoryDao;
 import com.unimitra.dao.DiscussionDao;
+import com.unimitra.dao.UserDetailsDao;
 import com.unimitra.entity.AnswersEntity;
 import com.unimitra.entity.QuestionsEntity;
 import com.unimitra.exception.ErrorCodes;
@@ -27,9 +28,11 @@ public class DiscussionServiceImpl implements DiscussionService {
 	DiscussionDao discussionDao;
 	@Autowired
 	CategoryDao categoryDao;
+	@Autowired
+	UserDetailsDao userDetailsDao;
 
 	@Override
-	public ResponseEntity<String> postQuestion(DiscussionModel discussionModel) {
+	public ResponseEntity<String> postQuestion(DiscussionModel discussionModel) throws UnimitraException {
 		QuestionsEntity questionEntity = new QuestionsEntity();
 		questionEntity.setQuestionCategoryId(categoryDao.getCategoryIdFromCategoryName(discussionModel.getCategory()));
 		questionEntity.setQuestionCreationDateTime(new Timestamp(System.currentTimeMillis()));
@@ -65,6 +68,23 @@ public class DiscussionServiceImpl implements DiscussionService {
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
+	@Override
+	public ResponseEntity<String> closeDiscussionThread(DiscussionModel discussionModel) throws UnimitraException {
+		int userId = discussionModel.getUserId();
+		if (isUserStaff(userId)) {
+
+		}
+
+		// Check if user is admin userDetailsDao
+		// close a thread
+
+		return null;
+	}
+
+	private boolean isUserStaff(int userId) throws UnimitraException {
+		return discussionDao.getUserType(userId).equals("staff");
+	}
+
 	private void deleteAnswerIfAddedByUser(Integer answerId, Integer userId) throws UnimitraException {
 		if (discussionDao.getAnswerPosterUserId(answerId) == userId) {
 			discussionDao.deleteAnswer(answerId);
@@ -76,6 +96,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 	private void deleteQuestionIfAddedByUser(Integer questionId, Integer userId) throws UnimitraException {
 		if (discussionDao.getQuestionPosterUserId(questionId) == userId) {
 			discussionDao.deleteQuestion(questionId);
+			discussionDao.deletAllAnswersOfQuestion(questionId);
 		} else {
 			throw new UnimitraException(ErrorCodes.USER_HAS_NO_ACCESS);
 		}

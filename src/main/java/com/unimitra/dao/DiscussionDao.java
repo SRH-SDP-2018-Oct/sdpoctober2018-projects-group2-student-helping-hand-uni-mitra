@@ -6,16 +6,20 @@ import com.unimitra.exception.UnimitraException;
 
 public interface DiscussionDao {
 
-	public String postQuestions(QuestionsEntity questionEntity);
+	public void postQuestions(QuestionsEntity questionEntity);
 
-	public String postAnswers(AnswersEntity answersEntity);
+	public void postAnswers(AnswersEntity answersEntity);
 
-	public String deleteQuestion(Integer questionId);
+	public void deleteQuestion(Integer questionId);
 
-	public String deleteAnswer(Integer answerId);
+	public void deleteAnswer(Integer answerId);
 
 	public int getQuestionPosterUserId(Integer questionId) throws UnimitraException;
 
 	public int getAnswerPosterUserId(Integer questionId) throws UnimitraException;
+
+	public String getUserType(int userId) throws UnimitraException;
+
+	public void deletAllAnswersOfQuestion(Integer questionId);
 
 }

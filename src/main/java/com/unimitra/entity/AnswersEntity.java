@@ -19,28 +19,28 @@ import lombok.ToString;
 @Entity
 @Table(name = "answers")
 public class AnswersEntity {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "answer_id")
 	private int answerId;
-	
+
 	@Column(name = "answer_posted_by_user_id")
 	private int answerPostedByUserId;
-	
+
 	@Column(name = "answer_description")
 	private String answerDescription;
-	
+
 	@Column(name = "question_id")
 	private int questionId;
-	
+
 	@Column(name = "answer_date_time")
 	private Timestamp answerDateTime;
-	
+
 	@Column(name = "answer_is_active")
 	private boolean answerIsActive;
-	
+
 	@Column(name = "answer_status")
 	private String answerStatus;
-		
+
 }

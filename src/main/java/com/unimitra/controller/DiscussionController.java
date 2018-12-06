@@ -24,7 +24,7 @@ public class DiscussionController {
 	DiscussionService discussionService;
 
 	@PostMapping("/post-question")
-	public ResponseEntity<String> postQuestions(@RequestBody DiscussionModel question) {
+	public ResponseEntity<String> postQuestions(@RequestBody DiscussionModel question) throws UnimitraException {
 		return discussionService.postQuestion(question);
 	}
 
