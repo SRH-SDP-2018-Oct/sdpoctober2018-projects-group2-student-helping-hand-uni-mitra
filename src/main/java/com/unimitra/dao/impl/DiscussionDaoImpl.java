@@ -17,10 +17,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.unimitra.dao.DiscussionDao;
 import com.unimitra.entity.AnswersEntity;
-import com.unimitra.entity.GroupEntity;
-import com.unimitra.entity.GroupMemberEntity;
 import com.unimitra.entity.QuestionsEntity;
-import com.unimitra.entity.UserDetailsEntity;
 import com.unimitra.exception.ErrorCodes;
 import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.DiscussionModel;
@@ -62,47 +59,6 @@ public class DiscussionDaoImpl implements DiscussionDao {
 	public int getAnswerPosterUserId(Integer answerId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
 		return getAnswersEntity(answerId, session).getAnswerPostedByUserId();
-	}
-
-	@Override
-	public String getUserType(int userId) throws UnimitraException {
-		// TODO Add This Method in UserDao
-		Session session = sessionFactory.getCurrentSession();
-		UserDetailsEntity userEntity = session.get(UserDetailsEntity.class, userId);
-		nullCheckForEntity(userEntity, ErrorCodes.USER_NOT_PRESENT);
-		return userEntity.getUserType();
-	}
-
-	@Override
-	public boolean checkIfUserHasAccessToGroup(int userId, int groupId) throws UnimitraException {
-		// TODO Add this method in Group DAO
-		Session session = sessionFactory.getCurrentSession();
-		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-		CriteriaQuery<GroupMemberEntity> criteriaQuery = criteriaBuilder.createQuery(GroupMemberEntity.class);
-		Root<GroupMemberEntity> groupRoot = criteriaQuery.from(GroupMemberEntity.class);
-		criteriaQuery.select(groupRoot);
-
-		criteriaQuery.where(criteriaBuilder.equal(groupRoot.get("memberGroupId"), groupId),
-				criteriaBuilder.equal(groupRoot.get("memberUserId"), userId));
-
-		List<GroupMemberEntity> groupMemberEntity = session.createQuery(criteriaQuery).getResultList();
-		return !CollectionUtils.isEmpty(groupMemberEntity);
-	}
-
-	@Override
-	public int getGroupIdFromGroupName(String groupName) throws UnimitraException {
-		// TODO Add this method in Group DAO
-		Session session = sessionFactory.getCurrentSession();
-		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-		CriteriaQuery<GroupEntity> criteriaQuery = criteriaBuilder.createQuery(GroupEntity.class);
-		Root<GroupEntity> groupRoot = criteriaQuery.from(GroupEntity.class);
-		criteriaQuery.select(groupRoot);
-		criteriaQuery.where(criteriaBuilder.equal(groupRoot.get("groupName"), groupName));
-		List<GroupEntity> groupMemberEntity = session.createQuery(criteriaQuery).getResultList();
-		if (CollectionUtils.isEmpty(groupMemberEntity)) {
-			throw new UnimitraException(ErrorCodes.GROUP_DOES_NOT_EXIST);
-		}
-		return groupMemberEntity.get(0).getGroupId();
 	}
 
 	@Override
