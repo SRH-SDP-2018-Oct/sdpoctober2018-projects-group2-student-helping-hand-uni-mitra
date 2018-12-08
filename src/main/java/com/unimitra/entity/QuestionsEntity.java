@@ -46,3 +46,4 @@ public class QuestionsEntity {
 	@Column(name = "question_group_id")
 	private Integer questionGroupId;
 }
+

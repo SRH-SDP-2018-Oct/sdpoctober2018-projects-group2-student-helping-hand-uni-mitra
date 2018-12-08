@@ -14,9 +14,12 @@ public class UserDetailsModel {
 	private String lastName;
 	private Date dateOfBirth;
 	private String enrollmentId;
-	private List<AnswerModel> answerList;
-	private List<DiscussionModel> questionList;
-	private List<GroupModel> groupList;
-		
+	private String emailId;
+	private String userDesignation;
+	private String userType;
+	private List<?> answerList;
+	private List<?> questionList;
+	private List<?> groupList;
+	private List<?> eventsList;
 
 }

@@ -1,5 +1,7 @@
 package com.unimitra.controller;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class UserController {
 
 	@GetMapping("/personal-view")
 	public UserDetailsModel getPersonalDetails(@RequestParam int userId, @RequestParam String userName) {
-		UserDetailsModel userDetail = userDetailsService.getUserDetails(1);
+		UserDetailsModel userDetail = userDetailsService.getUserDetails(userId);
 		LOGGER.info("Requested User Details " + userDetail.toString());
 		return ObjectUtils.isEmpty(userDetail) ? null : userDetail;
 	}
