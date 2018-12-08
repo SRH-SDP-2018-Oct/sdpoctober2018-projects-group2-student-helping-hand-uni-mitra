@@ -1,10 +1,12 @@
 package com.unimitra.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,10 +17,13 @@ import org.springframework.util.ObjectUtils;
 
 import com.unimitra.dao.DiscussionDao;
 import com.unimitra.entity.AnswersEntity;
+import com.unimitra.entity.GroupEntity;
+import com.unimitra.entity.GroupMemberEntity;
 import com.unimitra.entity.QuestionsEntity;
 import com.unimitra.entity.UserDetailsEntity;
 import com.unimitra.exception.ErrorCodes;
 import com.unimitra.exception.UnimitraException;
+import com.unimitra.model.DiscussionModel;
 
 @Repository
 public class DiscussionDaoImpl implements DiscussionDao {
@@ -61,7 +66,7 @@ public class DiscussionDaoImpl implements DiscussionDao {
 
 	@Override
 	public String getUserType(int userId) throws UnimitraException {
-		// Add This Method in UserDao
+		// TODO Add This Method in UserDao
 		Session session = sessionFactory.getCurrentSession();
 		UserDetailsEntity userEntity = session.get(UserDetailsEntity.class, userId);
 		nullCheckForEntity(userEntity, ErrorCodes.USER_NOT_PRESENT);
@@ -69,20 +74,45 @@ public class DiscussionDaoImpl implements DiscussionDao {
 	}
 
 	@Override
-	public void deletAllAnswersOfQuestion(Integer questionId) throws UnimitraException {
+	public boolean checkIfUserHasAccessToGroup(int userId, int groupId) throws UnimitraException {
+		// TODO Add this method in Group DAO
 		Session session = sessionFactory.getCurrentSession();
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-		CriteriaQuery<AnswersEntity> criteriaQuery = criteriaBuilder.createQuery(AnswersEntity.class);
-		Root<AnswersEntity> questionsRoot = criteriaQuery.from(AnswersEntity.class);
-		criteriaQuery.select(questionsRoot);
-		criteriaQuery.where(criteriaBuilder.equal(questionsRoot.get("questionId"), questionId));
-		List<AnswersEntity> listOfAnswersWithGivenQuestionId = session.createQuery(criteriaQuery).getResultList();
+		CriteriaQuery<GroupMemberEntity> criteriaQuery = criteriaBuilder.createQuery(GroupMemberEntity.class);
+		Root<GroupMemberEntity> groupRoot = criteriaQuery.from(GroupMemberEntity.class);
+		criteriaQuery.select(groupRoot);
+
+		criteriaQuery.where(criteriaBuilder.equal(groupRoot.get("memberGroupId"), groupId),
+				criteriaBuilder.equal(groupRoot.get("memberUserId"), userId));
+
+		List<GroupMemberEntity> groupMemberEntity = session.createQuery(criteriaQuery).getResultList();
+		return !CollectionUtils.isEmpty(groupMemberEntity);
+	}
+
+	@Override
+	public int getGroupIdFromGroupName(String groupName) throws UnimitraException {
+		// TODO Add this method in Group DAO
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<GroupEntity> criteriaQuery = criteriaBuilder.createQuery(GroupEntity.class);
+		Root<GroupEntity> groupRoot = criteriaQuery.from(GroupEntity.class);
+		criteriaQuery.select(groupRoot);
+		criteriaQuery.where(criteriaBuilder.equal(groupRoot.get("groupName"), groupName));
+		List<GroupEntity> groupMemberEntity = session.createQuery(criteriaQuery).getResultList();
+		if (CollectionUtils.isEmpty(groupMemberEntity)) {
+			throw new UnimitraException(ErrorCodes.GROUP_DOES_NOT_EXIST);
+		}
+		return groupMemberEntity.get(0).getGroupId();
+	}
+
+	@Override
+	public void deletAllAnswersOfQuestion(Integer questionId) throws UnimitraException {
+		List<AnswersEntity> listOfAnswersWithGivenQuestionId = getListOfAnswersBasedOnQuestionId(questionId);
 		if (!CollectionUtils.isEmpty(listOfAnswersWithGivenQuestionId)) {
 			for (AnswersEntity answer : listOfAnswersWithGivenQuestionId) {
 				deleteAnswer(answer.getAnswerId());
 			}
 		}
-
 	}
 
 	@Override
@@ -94,21 +124,108 @@ public class DiscussionDaoImpl implements DiscussionDao {
 	}
 
 	@Override
-	public int getQuestionPosterUserId(Integer questionId) throws UnimitraException {
+	public QuestionsEntity getQuestionEntityFromQuestionId(int questionId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
-		return getQuestionEntity(questionId, session).getQuestionPostedByUserId();
+		return getQuestionEntity(questionId, session);
 	}
 
 	@Override
-	public boolean getStatusOfDiscussionThread(int questionId) throws UnimitraException {
+	public List<DiscussionModel> searchOnKeyword(String searchString) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
-		return getQuestionEntity(questionId, session).isDiscussionThreadActive();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<QuestionsEntity> criteriaQuery = criteriaBuilder.createQuery(QuestionsEntity.class);
+		Root<QuestionsEntity> questionsRoot = criteriaQuery.from(QuestionsEntity.class);
+		criteriaQuery.select(questionsRoot);
+		EntityType<QuestionsEntity> type = session.getMetamodel().entity(QuestionsEntity.class);
+
+		criteriaQuery.where(
+				criteriaBuilder.like(
+						criteriaBuilder.lower(questionsRoot
+								.get(type.getDeclaredSingularAttribute("questionDescription", String.class))),
+						"%" + searchString.toLowerCase() + "%"),
+				criteriaBuilder.equal(questionsRoot.get("isQuestionActive"), true));
+
+		List<QuestionsEntity> listOfQuestionsWithGivenCategory = session.createQuery(criteriaQuery).getResultList();
+		getListOfDiscussionModelFromQuestionsEntity(listOfQuestionsWithGivenCategory);
+		return getListOfDiscussionModelFromQuestionsEntity(listOfQuestionsWithGivenCategory);
 	}
-	
+
 	@Override
-	public boolean getStatusOfQuestionDeletion(int questionId) throws UnimitraException {
+	public List<DiscussionModel> searchOnCategory(Integer categoryId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
-		return getQuestionEntity(questionId, session).isQuestionActive();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<QuestionsEntity> criteriaQuery = criteriaBuilder.createQuery(QuestionsEntity.class);
+		Root<QuestionsEntity> questionsRoot = criteriaQuery.from(QuestionsEntity.class);
+		criteriaQuery.select(questionsRoot);
+		criteriaQuery.where(criteriaBuilder.equal(questionsRoot.get("questionCategoryId"), categoryId),
+				criteriaBuilder.equal(questionsRoot.get("isQuestionActive"), true));
+		List<QuestionsEntity> listOfQuestionsWithGivenCategory = session.createQuery(criteriaQuery).getResultList();
+		return getListOfDiscussionModelFromQuestionsEntity(listOfQuestionsWithGivenCategory);
+	}
+
+	@Override
+	public List<DiscussionModel> searchOnKeywordInGroup(String searchString, int groupId, int userId) {
+
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<QuestionsEntity> criteriaQuery = criteriaBuilder.createQuery(QuestionsEntity.class);
+		Root<QuestionsEntity> questionsRoot = criteriaQuery.from(QuestionsEntity.class);
+		criteriaQuery.select(questionsRoot);
+		EntityType<QuestionsEntity> type = session.getMetamodel().entity(QuestionsEntity.class);
+
+		criteriaQuery.where(
+				criteriaBuilder.like(
+						criteriaBuilder.lower(questionsRoot
+								.get(type.getDeclaredSingularAttribute("questionDescription", String.class))),
+						"%" + searchString.toLowerCase() + "%"),
+				criteriaBuilder.equal(questionsRoot.get("questionGroupId"), groupId),
+				criteriaBuilder.equal(questionsRoot.get("isQuestionActive"), true));
+
+		List<QuestionsEntity> listOfQuestionsWithGivenCategory = session.createQuery(criteriaQuery).getResultList();
+		return getListOfDiscussionModelFromQuestionsEntity(listOfQuestionsWithGivenCategory);
+	}
+
+	@Override
+	public List<DiscussionModel> searchOnCategoryInGroup(int categoryid, int groupId) {
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<QuestionsEntity> criteriaQuery = criteriaBuilder.createQuery(QuestionsEntity.class);
+		Root<QuestionsEntity> questionsRoot = criteriaQuery.from(QuestionsEntity.class);
+		criteriaQuery.select(questionsRoot);
+		criteriaQuery.where(criteriaBuilder.equal(questionsRoot.get("questionCategoryId"), categoryid),
+				criteriaBuilder.equal(questionsRoot.get("isQuestionActive"), true),
+				criteriaBuilder.equal(questionsRoot.get("questionGroupId"), groupId));
+		List<QuestionsEntity> listOfQuestionsWithGivenCategory = session.createQuery(criteriaQuery).getResultList();
+		return getListOfDiscussionModelFromQuestionsEntity(listOfQuestionsWithGivenCategory);
+	}
+
+	private List<DiscussionModel> getListOfDiscussionModelFromQuestionsEntity(
+			List<QuestionsEntity> listOfQuestionsWithGivenCategory) {
+		List<DiscussionModel> listOfDiscussionModel = new ArrayList<>();
+		DiscussionModel discussionModel = new DiscussionModel();
+		listOfQuestionsWithGivenCategory.forEach(questionEntity -> {
+			discussionModel.setQuestionId(questionEntity.getQuestionId());
+			discussionModel.setQuestion(questionEntity.getQuestionDescription());
+			discussionModel.setUserId(questionEntity.getQuestionPostedByUserId());
+			discussionModel.setDiscussionThreadActive(questionEntity.isDiscussionThreadActive());
+			List<AnswersEntity> listOfAnswers = getListOfAnswersBasedOnQuestionId(questionEntity.getQuestionId());
+			discussionModel.setAnswer(listOfAnswers);
+			discussionModel.setCategoryId(questionEntity.getQuestionCategoryId());
+			discussionModel.setGroupId(questionEntity.getQuestionGroupId());
+			discussionModel.setTimestamp(questionEntity.getQuestionCreationDateTime());
+			listOfDiscussionModel.add(discussionModel);
+		});
+		return listOfDiscussionModel;
+	}
+
+	private List<AnswersEntity> getListOfAnswersBasedOnQuestionId(Integer questionId) {
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<AnswersEntity> criteriaQuery = criteriaBuilder.createQuery(AnswersEntity.class);
+		Root<AnswersEntity> questionsRoot = criteriaQuery.from(AnswersEntity.class);
+		criteriaQuery.select(questionsRoot);
+		criteriaQuery.where(criteriaBuilder.equal(questionsRoot.get("questionId"), questionId));
+		return session.createQuery(criteriaQuery).getResultList();
 	}
 
 	private AnswersEntity getAnswersEntity(Integer answerId, Session session) throws UnimitraException {
@@ -133,4 +250,5 @@ public class DiscussionDaoImpl implements DiscussionDao {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
+
 }

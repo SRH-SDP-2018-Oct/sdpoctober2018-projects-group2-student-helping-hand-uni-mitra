@@ -15,4 +15,5 @@ public class AnswerModel {
 	Timestamp time;
 	String designation;
 	int questionId;
+	//int groupId;
 }

@@ -3,20 +3,26 @@ package com.unimitra.model;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.unimitra.entity.AnswersEntity;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@JsonInclude(Include.NON_NULL)
 public class DiscussionModel {
-	private int questionId;
+	private Integer questionId;
 	private String category;
 	private String question;
 	private String userName;
-	private int userId;
+	private Integer userId;
 	private Date timestamp;
-	private List<AnswerModel> answer;
+	private List<AnswersEntity> answer;
 	private boolean discussionThreadActive;
-	private int groupId;
+	private Integer groupId;
+	private Integer categoryId;
 
 }

@@ -22,6 +22,13 @@ public class ErrorCodes {
 			+ ": Given answer does not exist";
 	public static final String CATEGORY_NOT_PRESENT = "UM1006 " + HttpStatus.BAD_REQUEST.value()
 			+ ": Given category does not exist";
-	public static final String QUESTION_THREAD_INACTIVE = "UM1007 " + HttpStatus.BAD_REQUEST.value()
+	public static final String QUESTION_THREAD_INACTIVE = "UM1010 " + HttpStatus.BAD_REQUEST.value()
 			+ ": The question thread is inactive so you cannot answer";
+	public static final String USER_DOES_NOT_HAVE_ACCESS_TO_GROUP = "UM1011 " + HttpStatus.UNAUTHORIZED.value()
+			+ ": The user has no access to group";
+	public static final String INVALID_SEARCH_REQUEST = "UM1012 " + HttpStatus.UNAUTHORIZED.value()
+			+ ": Invalid search discussion request";
+	public static final String NO_RESULTS_FOUND = "UM1013 " + HttpStatus.NOT_FOUND.value() + ": No results found";
+	public static final String GROUP_DOES_NOT_EXIST = "UM1014 " + HttpStatus.NOT_FOUND.value()
+			+ ": Group does not exist";
 }
