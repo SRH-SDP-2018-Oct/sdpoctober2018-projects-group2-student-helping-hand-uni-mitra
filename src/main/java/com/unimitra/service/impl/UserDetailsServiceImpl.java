@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.unimitra.dao.UserDetailsDao;
 import com.unimitra.entity.UserDetailsEntity;
+import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.UserDetailsModel;
 import com.unimitra.service.UserDetailsService;
 
@@ -20,7 +21,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	UserDetailsDao userDetailsDao;
 
 	@Override
-	public UserDetailsModel getUserDetails(int userId) {
+	public UserDetailsModel getUserDetailsPersonalView(int userId) throws UnimitraException {
+
 		UserDetailsEntity userData = userDetailsDao.getUserDetails(userId);
 		List<?> userAnswerData = userDetailsDao.getUserAnswerDetails(userId);
 		List<?> userQuestionData = userDetailsDao.getUserQuestionDetails(userId);
@@ -29,6 +31,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		UserDetailsModel userModelList = new UserDetailsModel();
 
+		buildUserDataObject(userData, userAnswerData, userQuestionData, userEventData, userGroupData, userModelList);
+
+		return userModelList;
+	}
+
+	private void buildUserDataObject(UserDetailsEntity userData, List<?> userAnswerData, List<?> userQuestionData,
+			List<?> userEventData, List<?> userGroupData, UserDetailsModel userModelList) {
 		userModelList.setUserId(userData.getUserId());
 		userModelList.setFirstName(userData.getFirstName());
 		userModelList.setLastName(userData.getLastName());
@@ -37,15 +46,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		userModelList.setEnrollmentId(userData.getEnrollmentId());
 		userModelList.setUserDesignation(userData.getUserDesignation());
 		userModelList.setUserType(userData.getUserType());
-		userModelList.setEmailId(userData.getFirstName());
-		userModelList.setEmailId(userData.getFirstName());
-		userModelList.setEmailId(userData.getFirstName());
+		userModelList.setPhoneNumber(userData.getPhoneNumber());
 		userModelList.setAnswerList(userAnswerData);
 		userModelList.setQuestionList(userQuestionData);
 		userModelList.setGroupList(userGroupData);
 		userModelList.setEventsList(userEventData);
+	}
 
+	@Override
+	public UserDetailsModel getUserDetailsPublicView(int userId) throws UnimitraException {
+
+		UserDetailsEntity userData = userDetailsDao.getUserDetails(userId);
+		UserDetailsModel userModelList = new UserDetailsModel();
+
+		userModelList.setFirstName(userData.getFirstName());
+		userModelList.setLastName(userData.getLastName());
+		userModelList.setEmailId(userData.getEmailId());
+		userModelList.setUserDesignation(userData.getUserDesignation());
+		userModelList.setUserType(userData.getUserType());
+		userModelList.setPhoneNumber(userData.getPhoneNumber());
 		return userModelList;
 
 	}
+
 }

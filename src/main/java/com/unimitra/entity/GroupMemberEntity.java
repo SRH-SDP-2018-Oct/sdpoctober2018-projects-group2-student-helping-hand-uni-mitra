@@ -32,8 +32,8 @@ public class GroupMemberEntity {
 	@Column(name = "member_group_id")
 	private int memberGroupId;
 	
-	@Column(name = "group_creation_date_time")
-	private Date groupCreationDateTime;
+	@Column(name = "group_member_creation_date_time")
+	private Date groupMemberCreationDateTime;
 	
 	@Column(name = "group_member_is_active")
 	private boolean groupMemberIsActive;

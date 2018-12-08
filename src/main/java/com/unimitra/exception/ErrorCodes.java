@@ -28,4 +28,8 @@ public class ErrorCodes {
 	+ ": There is no event for provided event Id";
 	public static final String MAPPING_NOT_PRESENT_FOR_EVENTID_USERID = "UM1008 " + HttpStatus.BAD_REQUEST.value()
 	+ ": User is not registered for gievn event Id";
+	public static final String GROUP_NOT_PRESET = "UM1009 " + HttpStatus.BAD_REQUEST.value()
+	+ ": Incorrect group name";
+	public static final String NO_GROUP_APPROVAL_REQUEST = "UM1010 " + HttpStatus.NO_CONTENT.value()
+	+ ": No group approval request found";
 }
