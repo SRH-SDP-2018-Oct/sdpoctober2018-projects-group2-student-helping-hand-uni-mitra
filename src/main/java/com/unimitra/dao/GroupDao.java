@@ -33,5 +33,5 @@ public interface GroupDao {
 
 	List<GroupEntity> getGroupListByGroupName(String groupName) throws UnimitraException;
 
-
+	public int getGroupIdFromGroupName(String groupName) throws UnimitraException;
 }

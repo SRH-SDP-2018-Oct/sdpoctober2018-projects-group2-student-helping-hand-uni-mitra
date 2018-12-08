@@ -15,6 +15,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.unimitra.dao.CategoryDao;
 import com.unimitra.dao.DiscussionDao;
+import com.unimitra.dao.GroupDao;
 import com.unimitra.dao.UserDetailsDao;
 import com.unimitra.entity.AnswersEntity;
 import com.unimitra.entity.QuestionsEntity;
@@ -33,6 +34,8 @@ public class DiscussionServiceImpl implements DiscussionService {
 	CategoryDao categoryDao;
 	@Autowired
 	UserDetailsDao userDetailsDao;
+	@Autowired
+	GroupDao groupDao;
 
 	@Override
 	public ResponseEntity<String> postQuestion(DiscussionModel discussionModel) throws UnimitraException {
@@ -72,7 +75,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 			throws UnimitraException {
 		validateDeleteDiscussionRequest(questionId, answerId);
 		if (ObjectUtils.isEmpty(groupId)) {
-			discussionDao.checkIfUserHasAccessToGroup(userId, groupId);
+			checkIfUserHasAccessToGroup(userId, groupId);
 		}
 		if (!(ObjectUtils.isEmpty(questionId))) {
 			deleteQuestionIfAddedByUser(questionId, userId);
@@ -118,7 +121,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 	private ResponseEntity<List<DiscussionModel>> searchOnCategoryInGroup(String category, String groupName, int userId)
 			throws UnimitraException {
 		int categoryid = categoryDao.getCategoryIdFromCategoryName(category.trim());
-		int groupId = discussionDao.getGroupIdFromGroupName(groupName);
+		int groupId = groupDao.getGroupIdFromGroupName(groupName);
 		checkIfUserHasAccessToGroup(userId, groupId);
 		List<DiscussionModel> listOfDiscussionModel = discussionDao.searchOnCategoryInGroup(categoryid, groupId);
 		checkIfCollectionIsEmpty(listOfDiscussionModel);
@@ -127,7 +130,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 
 	private ResponseEntity<List<DiscussionModel>> searchOnKeywordInGroup(String searchString, String groupName,
 			int userId) throws UnimitraException {
-		int groupId = discussionDao.getGroupIdFromGroupName(groupName);
+		int groupId = groupDao.getGroupIdFromGroupName(groupName);
 		checkIfUserHasAccessToGroup(userId, groupId);
 		List<DiscussionModel> listOfDiscussionModel = discussionDao.searchOnKeywordInGroup(searchString, groupId,
 				userId);
@@ -157,11 +160,11 @@ public class DiscussionServiceImpl implements DiscussionService {
 	}
 
 	private boolean isUserStaff(int userId) throws UnimitraException {
-		return discussionDao.getUserType(userId).equals("Staff");
+		return userDetailsDao.getUserDetails(userId).getUserType().equals("Staff");
 	}
 
 	private void deleteAnswerIfAddedByUser(Integer answerId, Integer userId) throws UnimitraException {
-		if (discussionDao.getAnswerPosterUserId(answerId) == userId) {
+		if (discussionDao.getAnswerPosterUserId(answerId) == userId || isUserStaff(userId)) {
 			discussionDao.deleteAnswer(answerId);
 		} else {
 			throw new UnimitraException(ErrorCodes.USER_HAS_NO_ACCESS);
@@ -169,7 +172,8 @@ public class DiscussionServiceImpl implements DiscussionService {
 	}
 
 	private void deleteQuestionIfAddedByUser(Integer questionId, Integer userId) throws UnimitraException {
-		if (discussionDao.getQuestionEntityFromQuestionId(questionId).getQuestionPostedByUserId() == userId) {
+		if (discussionDao.getQuestionEntityFromQuestionId(questionId).getQuestionPostedByUserId() == userId
+				|| isUserStaff(userId)) {
 			discussionDao.deleteQuestion(questionId);
 			discussionDao.deletAllAnswersOfQuestion(questionId);
 		} else {
@@ -208,7 +212,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 	}
 
 	private void checkIfUserHasAccessToGroup(int userId, int questionGroupId) throws UnimitraException {
-		if (!discussionDao.checkIfUserHasAccessToGroup(userId, questionGroupId)) {
+		if (!groupDao.checkIfUserHasAccessToGroup(userId, questionGroupId)) {
 			throw new UnimitraException(ErrorCodes.USER_DOES_NOT_HAVE_ACCESS_TO_GROUP);
 		}
 	}

@@ -96,7 +96,6 @@ public class GroupDaoImpl implements GroupDao {
 
 	@Override
 	public boolean checkIfUserHasAccessToGroup(int userId, int groupId) throws UnimitraException {
-		// TODO Add this method in Group DAO
 		Session session = sessionFactory.getCurrentSession();
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 		CriteriaQuery<GroupMemberEntity> criteriaQuery = criteriaBuilder.createQuery(GroupMemberEntity.class);
@@ -153,6 +152,21 @@ public class GroupDaoImpl implements GroupDao {
 
 		return session.createQuery(criteriaQuery).getResultList();
 
+	}
+
+	@Override
+	public int getGroupIdFromGroupName(String groupName) throws UnimitraException {
+		Session session = sessionFactory.getCurrentSession();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<GroupEntity> criteriaQuery = criteriaBuilder.createQuery(GroupEntity.class);
+		Root<GroupEntity> groupRoot = criteriaQuery.from(GroupEntity.class);
+		criteriaQuery.select(groupRoot);
+		criteriaQuery.where(criteriaBuilder.equal(groupRoot.get("groupName"), groupName));
+		List<GroupEntity> groupMemberEntity = session.createQuery(criteriaQuery).getResultList();
+		if (CollectionUtils.isEmpty(groupMemberEntity)) {
+			throw new UnimitraException(ErrorCodes.GROUP_DOES_NOT_EXIST);
+		}
+		return groupMemberEntity.get(0).getGroupId();
 	}
 
 	private void nullCheckForEntity(Object entity, String errorCode) throws UnimitraException {
