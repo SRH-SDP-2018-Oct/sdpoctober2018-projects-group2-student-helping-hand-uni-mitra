@@ -25,7 +25,15 @@ public class ErrorCodes {
 	public static final String EVENT_NOT_PRESENT = "UM1007 " + HttpStatus.BAD_REQUEST.value()
 	+ ": There is no upcoming events";
 	public static final String EVENT_NOT_PRESENT_FOR_EVENTID = "UM1008 " + HttpStatus.BAD_REQUEST.value()
-	+ ": There is no event for provided event Id";
+	+ ": There is no event for provided input";
 	public static final String MAPPING_NOT_PRESENT_FOR_EVENTID_USERID = "UM1008 " + HttpStatus.BAD_REQUEST.value()
-	+ ": User is not registered for gievn event Id";
+	+ ": User is not registered for given event";
+	public static final String GROUP_NOT_PRESENT_FOR_GROUPID = "UM1012 " + HttpStatus.BAD_REQUEST.value()
+	+ ": Group not present for provided input";
+	public static final String DUPLICATE_GROUP_NAME = "UM1014 " + HttpStatus.BAD_REQUEST.value()
+	+ ": Group already exsist";
+	
+	
+	
+	
 }

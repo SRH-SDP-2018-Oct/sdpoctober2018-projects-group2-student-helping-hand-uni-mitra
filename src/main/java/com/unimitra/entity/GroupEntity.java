@@ -32,7 +32,7 @@ public class GroupEntity {
 	private String groupDescription;
 	
 	@Column(name = "group_created_by_user_id")
-	private String groupCreatedByUserId;
+	private int groupCreatedByUserId;
 	
 	@Column(name = "group_creation_date_time")
 	private Date groupCreationDatetime;
@@ -44,8 +44,8 @@ public class GroupEntity {
 	private String groupApprovalStatus;
 	
 	@Column(name = "group_approval_by_user_id")
-	private String groupApprovalByUserId;
+	private int groupApprovalByUserId;
 
 	@Column(name = "group_category_id")
-	private String groupCategoryId;
+	private int groupCategoryId;
 }
