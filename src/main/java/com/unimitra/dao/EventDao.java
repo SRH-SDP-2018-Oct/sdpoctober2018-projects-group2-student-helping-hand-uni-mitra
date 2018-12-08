@@ -2,6 +2,8 @@ package com.unimitra.dao;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import com.unimitra.entity.EventsEntity;
 import com.unimitra.entity.EventsRegisterationEntity;
 import com.unimitra.exception.UnimitraException;
@@ -12,7 +14,7 @@ public interface EventDao {
 
 	EventsEntity getEventDetailById(int eventId) throws UnimitraException;
 
-	String deleteEventById(int eventId) throws UnimitraException;
+	ResponseEntity<String> deleteEventById(int eventId) throws UnimitraException;
 
 	EventsEntity postEvent(EventsEntity postEvent);
 
