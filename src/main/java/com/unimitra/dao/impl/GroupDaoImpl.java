@@ -34,7 +34,7 @@ public class GroupDaoImpl implements GroupDao {
 		@SuppressWarnings("unchecked")
 		List<Integer> groupId = session.createQuery("select groupId from GroupEntity where groupName=:Name")
 				.setParameter("Name", groupName).list();
-		nullCheckForEntity(groupId, ErrorCodes.GROUP_NOT_PRESET);
+		nullCheckForEntity(groupId, ErrorCodes.GROUP_NOT_PRESENT);
 		return groupId;
 	}
 
@@ -128,6 +128,7 @@ public class GroupDaoImpl implements GroupDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<GroupEntity> getGroupListByCategoryIds(List<Integer> categoryListIds) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
