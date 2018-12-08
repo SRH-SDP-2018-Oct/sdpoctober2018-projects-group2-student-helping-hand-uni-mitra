@@ -6,6 +6,8 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 
@@ -44,14 +46,14 @@ public class EventDaoImpl implements EventDao {
 	}
 
 	@Override
-	public String deleteEventById(int eventId) throws UnimitraException {
+	public ResponseEntity<String> deleteEventById(int eventId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
 		EventsEntity deleteEventById = session.get(EventsEntity.class, eventId);
 		nullCheckForEntity(deleteEventById, ErrorCodes.EVENT_NOT_PRESENT_FOR_EVENTID);
 
 		deleteEventById.setEventIsActive(flase);
 		session.update(deleteEventById);
-		return "200";
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 
 	@Override
@@ -70,7 +72,7 @@ public class EventDaoImpl implements EventDao {
 				.createQuery("from EventsRegisterationEntity er where er.userId = '" + userId + "' and er.eventId = '"
 						+ eventId + "'")
 				.getResultList();
-		nullCheckForEntity(eventRgistrationUser, ErrorCodes.MAPPING_NOT_PRESENT_FOR_EVENTID_USERID);
+		
 
 		return eventRgistrationUser;
 	}

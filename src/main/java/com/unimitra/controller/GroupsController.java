@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
+import com.unimitra.entity.GroupEntity;
 import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.GroupModel;
 import com.unimitra.service.GroupService;
@@ -23,15 +26,16 @@ public class GroupsController {
 	@Autowired
 	GroupService groupService;
 
-	@PostMapping("/create")
-	public String createGroup(@RequestBody GroupModel groupModel) {
-		return "Posted Successfully";
+	@PostMapping("/createGroup")
+	public ResponseEntity<String> createGroup(@RequestBody GroupEntity groupEntity) throws UnimitraException {
+		return groupService.createGroup(groupEntity);
 	}
 
 	@GetMapping("/search")
-	public List<GroupModel> getListOfGroups(@RequestParam(required = false) String groupName,
-			@RequestParam(required = false) String category) {
-		return new ArrayList<>();
+	public List<GroupEntity> getListOfGroups(@RequestParam(required = false) String groupName,
+			@RequestParam(required = false) String categoryName) throws UnimitraException {
+		return groupService.getListofGroups(groupName, categoryName);
+
 	}
 
 	@GetMapping("/pending-requests")
@@ -52,9 +56,8 @@ public class GroupsController {
 		return groupService.addMemberToGroup(userId, groupName);
 	}
 
-	@DeleteMapping("/delete-member")
-	public String deleteMemberFromGroup(@RequestParam int userId, @RequestParam int groupId,
-			@RequestParam boolean isMemberActive) {
-		return "Delete successful";
+	@DeleteMapping("/deleteGroup")
+	public ResponseEntity<String> deleteGroup(@RequestParam int groupId) throws UnimitraException {
+		return groupService.deleteGroupbyGroupId(groupId);
 	}
 }
