@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.unimitra.entity.GroupEntity;
 import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.GroupModel;
@@ -38,8 +39,10 @@ public class GroupsController {
 	}
 
 	@GetMapping("/pending-requests")
-	public List<GroupModel> getPendingGroupCreationRequests(@RequestParam(required = false) int userId) {
-		return new ArrayList<>();
+	public List<GroupModel> getPendingGroupCreationRequests(@RequestParam int userId) throws UnimitraException {
+		List<GroupModel> pendingRequestList = groupService.getPendingRequest(userId);
+		return pendingRequestList;
+
 	}
 
 	@PostMapping("/decide-approval")
@@ -49,8 +52,8 @@ public class GroupsController {
 	}
 
 	@PostMapping("/add-member")
-	public String addMemberToGroup(@RequestParam int userId, @RequestParam int groupId) {
-		return "Added successful";
+	public String addMemberToGroup(@RequestParam int userId, @RequestParam String groupName) throws UnimitraException {
+		return groupService.addMemberToGroup(userId, groupName);
 	}
 
 	@DeleteMapping("/deleteGroup")

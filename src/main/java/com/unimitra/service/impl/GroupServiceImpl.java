@@ -15,8 +15,10 @@ import org.springframework.util.ObjectUtils;
 import com.unimitra.dao.GroupDao;
 import com.unimitra.entity.CategoryEntity;
 import com.unimitra.entity.GroupEntity;
+import com.unimitra.entity.GroupMemberEntity;
 import com.unimitra.exception.ErrorCodes;
 import com.unimitra.exception.UnimitraException;
+import com.unimitra.model.GroupModel;
 import com.unimitra.service.GroupService;
 
 @Service
@@ -27,6 +29,24 @@ public class GroupServiceImpl implements GroupService {
 	GroupDao groupDao;
 
 	@Override
+	public String addMemberToGroup(int userId, String groupName) throws UnimitraException {
+		List<Integer> groupId = groupDao.getGroupIdData(groupName);
+		Timestamp time = new Timestamp(System.currentTimeMillis());
+		GroupMemberEntity groupMemberEntity = new GroupMemberEntity();
+		groupMemberEntity.setMemberUserId(userId);
+		groupMemberEntity.setMemberGroupId(groupId.get(0));
+		groupMemberEntity.setGroupMemberIsActive(true);
+		groupMemberEntity.setGroupMemberCreationDateTime(time);
+		return groupDao.addMemberToGroupData(groupMemberEntity);
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<GroupModel> getPendingRequest(int userId) throws UnimitraException {
+		return (List<GroupModel>) groupDao.getPendingRequestdata(userId);
+	}
+
 	public ResponseEntity<String> createGroup(GroupEntity groupEntity) throws UnimitraException {
 
 		String groupName = groupEntity.getGroupName();
@@ -75,6 +95,7 @@ public class GroupServiceImpl implements GroupService {
 		listOfGroups = groupDao.getGroupListByGroupName(groupName);
 
 		return listOfGroups;
+
 	}
 
 }

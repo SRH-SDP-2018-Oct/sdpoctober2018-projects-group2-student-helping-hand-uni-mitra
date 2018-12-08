@@ -6,20 +6,24 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
 
 import com.unimitra.dao.UserDetailsDao;
 import com.unimitra.entity.UserDetailsEntity;
+import com.unimitra.exception.ErrorCodes;
+import com.unimitra.exception.UnimitraException;
 
 @Repository
 public class UserDetailsDaoImpl implements UserDetailsDao {
-
+	public static final String USER_ID_FOR_QUERY="";
 	SessionFactory sessionFactory;
 
 	@Override
-	public UserDetailsEntity getUserDetails(int userId) {
+	public UserDetailsEntity getUserDetails(int userId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
-		UserDetailsEntity userDetailEntity = new UserDetailsEntity();
+		UserDetailsEntity userDetailEntity ;
 		userDetailEntity = session.get(UserDetailsEntity.class, userId);
+		nullCheckForEntity(userDetailEntity, ErrorCodes.USER_NOT_PRESENT);
 		return userDetailEntity;
 	}
 
@@ -29,8 +33,8 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
 		return (List<?>) session
 				.createQuery("select a.answerDescription,a.answerStatus \r\n"
 						+ "from UserDetailsEntity ud,AnswersEntity a \r\n"
-						+ "where ud.userId = a.answerPostedByUserId and ud.userId =: userIdForQuery")
-				.setParameter("userIdForQuery", userId).list();
+						+ "where ud.userId = a.answerPostedByUserId and ud.userId =: USER_ID_FOR_QUERY")
+				.setParameter("USER_ID_FOR_QUERY", userId).list();
 	}
 
 	@Override
@@ -38,8 +42,8 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<?>) session
 				.createQuery("select q.questionDescription \r\n" + "from UserDetailsEntity ud,QuestionsEntity q \r\n"
-						+ "where ud.userId = q.questionPostedByUserId and ud.userId =: userIdForQuery")
-				.setParameter("userIdForQuery", userId).list();
+						+ "where ud.userId = q.questionPostedByUserId and ud.userId =: USER_ID_FOR_QUERY")
+				.setParameter("USER_ID_FOR_QUERY", userId).list();
 
 	}
 
@@ -49,25 +53,30 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
 		return (List<?>) session.createQuery("select e.eventName \r\n"
 				+ "from UserDetailsEntity ud,EventsEntity e,EventsRegisterationEntity ev \r\n"
 				+ "where  e.eventId = ev.eventId and \r\n"
-				+ "ev.userId = ud.userId  and ud.userId =: userIdForQuery and ev.eventRegistrationFlag= true and "
-				+ "e.eventIsActive = true").setParameter("userIdForQuery", userId).list();
+				+ "ev.userId = ud.userId  and ud.userId =: USER_ID_FOR_QUERY and ev.eventRegistrationFlag= true and "
+				+ "e.eventIsActive = true").setParameter("USER_ID_FOR_QUERY", userId).list();
 	}
 
 	@Override
 	public List<?> getUserGroupDetails(int userId) {
 		Session session = sessionFactory.getCurrentSession();
-		List<?> list = (List<?>) session.createQuery("select g.groupName\r\n"
+		return session.createQuery("select g.groupName\r\n"
 				+ "from UserDetailsEntity ud,GroupEntity g,GroupMemberEntity gm\r\n" + "where\r\n"
 				+ "gm.memberGroupId = g.groupId and\r\n"
-				+ "gm.memberUserId = ud.userId and ud.userId = : userIdForQuery and gm.groupMemberIsActive = true and g.groupApprovalStatus = 'Approved'")
-				.setParameter("userIdForQuery", userId).list();
-		return list;
+				+ "gm.memberUserId = ud.userId and ud.userId = : USER_ID_FOR_QUERY and gm.groupMemberIsActive = true and g.groupApprovalStatus = 'Approved'")
+				.setParameter("USER_ID_FOR_QUERY", userId).list();
 
 	}
 
 	@Autowired
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
+	}
+	
+	private void nullCheckForEntity(Object entity, String errorCode) throws UnimitraException {
+		if (ObjectUtils.isEmpty(entity)) {
+			throw new UnimitraException(errorCode);
+		}
 	}
 
 }

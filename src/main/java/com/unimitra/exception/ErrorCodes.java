@@ -44,4 +44,9 @@ public class ErrorCodes {
 	public static final String NO_RESULTS_FOUND = "UM1015 " + HttpStatus.NOT_FOUND.value() + ": No results found";
 	public static final String GROUP_DOES_NOT_EXIST = "UM1016 " + HttpStatus.NOT_FOUND.value()
 			+ ": Group does not exist";
+			
+	public static final String GROUP_NOT_PRESENT = "UM1017 " + HttpStatus.BAD_REQUEST.value()
+	+ ": Incorrect group name";
+	public static final String NO_GROUP_APPROVAL_REQUEST = "UM1018 " + HttpStatus.NO_CONTENT.value()
+	+ ": No group approval request found";
 }

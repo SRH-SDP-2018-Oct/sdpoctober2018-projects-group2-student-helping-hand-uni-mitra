@@ -1,9 +1,5 @@
 package com.unimitra.controller;
 
-import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.UserDetailsModel;
 import com.unimitra.service.UserDetailsService;
 
@@ -18,20 +15,19 @@ import com.unimitra.service.UserDetailsService;
 @RequestMapping("/user")
 public class UserController {
 
-	private static final Logger LOGGER = LogManager.getLogger();
 	@Autowired
 	UserDetailsService userDetailsService;
 
 	@GetMapping("/personal-view")
-	public UserDetailsModel getPersonalDetails(@RequestParam int userId, @RequestParam String userName) {
-		UserDetailsModel userDetail = userDetailsService.getUserDetails(userId);
-		LOGGER.info("Requested User Details " + userDetail.toString());
-		return ObjectUtils.isEmpty(userDetail) ? null : userDetail;
+	public UserDetailsModel getPersonalDetails(@RequestParam int userId) throws UnimitraException {
+		UserDetailsModel userDetailPersonalView = userDetailsService.getUserDetailsPersonalView(userId);
+		return ObjectUtils.isEmpty(userDetailPersonalView) ? null : userDetailPersonalView;
 	}
 
 	@GetMapping("/public-view")
-	public UserDetailsModel getPublicUserDetails(@RequestParam int userId, @RequestParam String userName) {
-		return null;
+	public UserDetailsModel getPublicUserDetails(@RequestParam int userId) throws UnimitraException {
+		UserDetailsModel userDetailPublicView = userDetailsService.getUserDetailsPublicView(userId);
+		return ObjectUtils.isEmpty(userDetailPublicView) ? null : userDetailPublicView;
 
 	}
 

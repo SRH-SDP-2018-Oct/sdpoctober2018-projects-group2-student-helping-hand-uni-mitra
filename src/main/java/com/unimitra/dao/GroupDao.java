@@ -2,13 +2,24 @@ package com.unimitra.dao;
 
 import java.util.List;
 
+
+import com.unimitra.entity.GroupMemberEntity;
+
 import org.springframework.http.ResponseEntity;
 
 import com.unimitra.entity.CategoryEntity;
 import com.unimitra.entity.GroupEntity;
+
 import com.unimitra.exception.UnimitraException;
 
 public interface GroupDao {
+
+
+	List<Integer> getGroupIdData(String groupName) throws UnimitraException;
+
+	String addMemberToGroupData(GroupMemberEntity groupMemberEntity);
+
+	List<?> getPendingRequestdata(int userId) throws UnimitraException;
 
 	GroupEntity createGroup(GroupEntity groupEntity);
 

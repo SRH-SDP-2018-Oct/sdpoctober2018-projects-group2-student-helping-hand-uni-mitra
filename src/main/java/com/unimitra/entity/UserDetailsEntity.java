@@ -9,15 +9,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-@Getter
+
 @Setter
-@ToString
+@Getter
 @Entity
+@JsonFilter("UserDetailsEntityFilter")
 @Table(name = "user_details")
+
 public class UserDetailsEntity {
 
 	@Id
@@ -60,6 +63,9 @@ public class UserDetailsEntity {
 
 	@Column(name = "user_is_active")
 	private boolean userIsActive;
+	
+	@Column(name = "phone_number")
+	private String phoneNumber;
 
 }
 
