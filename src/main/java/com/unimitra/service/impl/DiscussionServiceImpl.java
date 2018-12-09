@@ -46,8 +46,8 @@ public class DiscussionServiceImpl implements DiscussionService {
 		questionEntity.setQuestionActive(true);
 		questionEntity.setDiscussionThreadActive(true);
 		questionEntity.setQuestionPostedByUserId(discussionModel.getUserId());
-		int questionGroupId = discussionModel.getGroupId();
-		if (questionGroupId != 0) {
+		Integer questionGroupId = discussionModel.getGroupId();
+		if (!ObjectUtils.isEmpty(questionGroupId)) {
 			checkIfUserHasAccessToGroup(discussionModel.getUserId(), questionGroupId);
 			questionEntity.setQuestionGroupId(questionGroupId);
 		}
