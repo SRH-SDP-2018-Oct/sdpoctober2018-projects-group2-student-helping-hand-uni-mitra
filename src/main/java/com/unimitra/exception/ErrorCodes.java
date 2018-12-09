@@ -49,6 +49,9 @@ public class ErrorCodes {
 	+ ": Incorrect group name";
 	public static final String NO_GROUP_APPROVAL_REQUEST = "UM1018 " + HttpStatus.NO_CONTENT.value()
 	+ ": No group approval request found";
+	public static final String USER_HAS_NO_ACCESS_TO_ADD_MEMBER_TO_GROUP = "UM1019 " + HttpStatus.UNAUTHORIZED.value()
+	+ ": User has no access to add a member to the group as logged-in is not a admin.";
+	
 	public static final String USER_HAS_NO_ACCESS_FOR_JAPSER_REPORT = "UM1019 " + HttpStatus.UNAUTHORIZED.value()
 	+ ": You do not have access to generate Report. Only Staff members can generate Report.";
 }
