@@ -16,6 +16,7 @@ import com.unimitra.entity.EventsEntity;
 import com.unimitra.entity.EventsRegisterationEntity;
 import com.unimitra.exception.ErrorCodes;
 import com.unimitra.exception.UnimitraException;
+import com.unimitra.utility.UnimitraUtility;
 
 @Repository
 public class EventDaoImpl implements EventDao {
@@ -32,7 +33,7 @@ public class EventDaoImpl implements EventDao {
 				.createQuery(
 						"from EventsEntity e where event_date_time >= '" + time + "'order by e.eventCreationDate desc")
 				.list();
-		nullCheckForEntity(eventList, ErrorCodes.EVENT_NOT_PRESENT);
+		UnimitraUtility.nullCheckForEntity(eventList, ErrorCodes.EVENT_NOT_PRESENT);
 		return eventList;
 	}
 
@@ -40,7 +41,7 @@ public class EventDaoImpl implements EventDao {
 	public EventsEntity getEventDetailById(int eventId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
 		EventsEntity eventByEventId = session.get(EventsEntity.class, eventId);
-		nullCheckForEntity(eventByEventId, ErrorCodes.EVENT_NOT_PRESENT_FOR_EVENTID);
+		UnimitraUtility.nullCheckForEntity(eventByEventId, ErrorCodes.EVENT_NOT_PRESENT_FOR_EVENTID);
 		return eventByEventId;
 
 	}
@@ -90,12 +91,6 @@ public class EventDaoImpl implements EventDao {
 		Session session = sessionFactory.getCurrentSession();
 		session.update(eventsRegistrationEntity1);
 
-	}
-
-	private void nullCheckForEntity(Object entity, String errorCode) throws UnimitraException {
-		if (ObjectUtils.isEmpty(entity)) {
-			throw new UnimitraException(errorCode);
-		}
 	}
 
 	@Autowired
