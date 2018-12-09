@@ -1,9 +1,9 @@
 package com.unimitra.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unimitra.entity.GroupEntity;
+import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.GroupModel;
 import com.unimitra.service.GroupService;
 
@@ -23,20 +24,24 @@ public class GroupsController {
 @Autowired
 GroupService groupService;
 
-	@PostMapping("/create")
-	public String createGroup(@RequestBody GroupModel groupModel) {
-		return "Posted Successfully";
+
+	@PostMapping("/createGroup")
+	public ResponseEntity<String> createGroup(@RequestBody GroupEntity groupEntity) throws UnimitraException {
+		return groupService.createGroup(groupEntity);
 	}
 
 	@GetMapping("/search")
-	public List<GroupModel> getListOfGroups(@RequestParam(required = false) String groupName,
-			@RequestParam(required = false) String category) {
-		return new ArrayList<>();
+	public List<GroupEntity> getListOfGroups(@RequestParam(required = false) String groupName,
+			@RequestParam(required = false) String categoryName) throws UnimitraException {
+		return groupService.getListofGroups(groupName, categoryName);
+
 	}
 
 	@GetMapping("/pending-requests")
-	public List<GroupModel> getPendingGroupCreationRequests(@RequestParam(required = false) int userId) {
-		return new ArrayList<>();
+	public List<GroupModel> getPendingGroupCreationRequests(@RequestParam int userId) throws UnimitraException {
+		List<GroupModel> pendingRequestList = groupService.getPendingRequest(userId);
+		return pendingRequestList;
+
 	}
 
 	@PostMapping("/decide-approval")
@@ -45,13 +50,12 @@ GroupService groupService;
 	}
 
 	@PostMapping("/add-member")
-	public String addMemberToGroup(@RequestParam int userId, @RequestParam int groupId) {
-		return "Added successful";
+	public String addMemberToGroup(@RequestParam int userId, @RequestParam String groupName) throws UnimitraException {
+		return groupService.addMemberToGroup(userId, groupName);
 	}
 
-	@DeleteMapping("/delete-member")
-	public String deleteMemberFromGroup(@RequestParam int userId, @RequestParam int groupId,
-			@RequestParam boolean isMemberActive) {
-		return "Delete successful";
+	@DeleteMapping("/deleteGroup")
+	public ResponseEntity<String> deleteGroup(@RequestParam int groupId) throws UnimitraException {
+		return groupService.deleteGroupbyGroupId(groupId);
 	}
 }

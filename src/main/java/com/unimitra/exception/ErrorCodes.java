@@ -12,6 +12,7 @@ public class ErrorCodes {
 			+ ": User does not have access to do the mentioned change";
 	public static final String INVALID_REQUEST = "UM1002 " + HttpStatus.BAD_REQUEST.value()
 			+ ": Invalid Request or Request Parameters";
+
 	public static final String USER_NOT_PRESENT = "UM1003 " + HttpStatus.BAD_REQUEST.value()
 			+ ": Given user does not exist";
 	public static final String INVALID_DELETE_DISCUSSION_REQUEST = "UM1004 " + HttpStatus.BAD_REQUEST.value()
@@ -22,10 +23,30 @@ public class ErrorCodes {
 			+ ": Given answer does not exist";
 	public static final String CATEGORY_NOT_PRESENT = "UM1006 " + HttpStatus.BAD_REQUEST.value()
 			+ ": Given category does not exist";
+
 	public static final String EVENT_NOT_PRESENT = "UM1007 " + HttpStatus.BAD_REQUEST.value()
-	+ ": There is no upcoming events";
+			+ ": There is no upcoming events";
 	public static final String EVENT_NOT_PRESENT_FOR_EVENTID = "UM1008 " + HttpStatus.BAD_REQUEST.value()
-	+ ": There is no event for provided event Id";
-	public static final String MAPPING_NOT_PRESENT_FOR_EVENTID_USERID = "UM1008 " + HttpStatus.BAD_REQUEST.value()
-	+ ": User is not registered for gievn event Id";
+			+ ": There is no event for provided input";
+	public static final String MAPPING_NOT_PRESENT_FOR_EVENTID_USERID = "UM1009 " + HttpStatus.BAD_REQUEST.value()
+			+ ": User is not registered for given event";
+	public static final String GROUP_NOT_PRESENT_FOR_GROUPID = "UM1010 " + HttpStatus.BAD_REQUEST.value()
+			+ ": Group not present for provided input";
+	public static final String DUPLICATE_GROUP_NAME = "UM1011 " + HttpStatus.BAD_REQUEST.value()
+			+ ": Group already exsist";
+
+	public static final String QUESTION_THREAD_INACTIVE = "UM1012 " + HttpStatus.BAD_REQUEST.value()
+			+ ": The question thread is inactive so you cannot answer";
+	public static final String USER_DOES_NOT_HAVE_ACCESS_TO_GROUP = "UM1013 " + HttpStatus.UNAUTHORIZED.value()
+			+ ": The user has no access to group";
+	public static final String INVALID_SEARCH_REQUEST = "UM1014 " + HttpStatus.UNAUTHORIZED.value()
+			+ ": Invalid search discussion request";
+	public static final String NO_RESULTS_FOUND = "UM1015 " + HttpStatus.NOT_FOUND.value() + ": No results found";
+	public static final String GROUP_DOES_NOT_EXIST = "UM1016 " + HttpStatus.NOT_FOUND.value()
+			+ ": Group does not exist";
+			
+	public static final String GROUP_NOT_PRESENT = "UM1017 " + HttpStatus.BAD_REQUEST.value()
+	+ ": Incorrect group name";
+	public static final String NO_GROUP_APPROVAL_REQUEST = "UM1018 " + HttpStatus.NO_CONTENT.value()
+	+ ": No group approval request found";
 }

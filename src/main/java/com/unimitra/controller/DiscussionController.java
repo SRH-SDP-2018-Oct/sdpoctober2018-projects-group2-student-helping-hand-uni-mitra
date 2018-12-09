@@ -1,5 +1,7 @@
 package com.unimitra.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,24 +31,25 @@ public class DiscussionController {
 	}
 
 	@PostMapping("/answer-question")
-	public ResponseEntity<String> answerQuestions(@RequestBody AnswerModel answer) {
+	public ResponseEntity<String> answerQuestions(@RequestBody AnswerModel answer) throws UnimitraException {
 		return discussionService.answerQuestion(answer);
 	}
 
 	@DeleteMapping("/delete")
 	public ResponseEntity<String> deleteQuestionsOrAnswers(@RequestParam(required = false) Integer questionId,
-			@RequestParam(required = false) Integer answerId, @RequestParam Integer userId) throws UnimitraException {
-		return discussionService.delete(questionId, answerId, userId);
+			@RequestParam(required = false) Integer answerId, @RequestParam Integer userId, @RequestParam(required = false) Integer groupId) throws UnimitraException {
+		return discussionService.delete(questionId, answerId, userId, groupId);
 	}
 
 	@PutMapping("/close-thread")
-	public String closeThread(@RequestBody DiscussionModel question) {
-		return "Closed Successfully";
+	public ResponseEntity<String> closeThread(@RequestBody DiscussionModel discussionModel) throws UnimitraException {
+		return discussionService.closeDiscussionThread(discussionModel);
 	}
 
 	@GetMapping("/search")
-	public String detailedSearch(@RequestParam String searchString, @RequestParam String category,
-			@RequestParam String groupName, @RequestParam int userId) {
-		return "Closed Successfully";
+	public ResponseEntity<List<DiscussionModel>> detailedSearch(@RequestParam(required = false) String searchString,
+			@RequestParam(required = false) String category, @RequestParam(required = false) String groupName,
+			@RequestParam(required = false) Integer userId) throws UnimitraException {
+		return discussionService.getDiscussions(searchString, category, groupName, userId);
 	}
 }
