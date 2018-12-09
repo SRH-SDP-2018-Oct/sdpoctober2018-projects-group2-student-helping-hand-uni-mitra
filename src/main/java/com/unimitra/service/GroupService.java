@@ -12,7 +12,7 @@ import com.unimitra.model.GroupModel;
 @Service
 public interface GroupService {
 
-	String addMemberToGroup(int userId, String groupName) throws UnimitraException;
+	String addMemberToGroup(int userIdToAdd, String groupName, int loggedInUserId) throws UnimitraException;
 
 	List<GroupModel> getPendingRequest(int userId) throws UnimitraException;
 

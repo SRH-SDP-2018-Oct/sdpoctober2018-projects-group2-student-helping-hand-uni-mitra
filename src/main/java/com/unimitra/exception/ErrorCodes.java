@@ -49,4 +49,6 @@ public class ErrorCodes {
 	+ ": Incorrect group name";
 	public static final String NO_GROUP_APPROVAL_REQUEST = "UM1018 " + HttpStatus.NO_CONTENT.value()
 	+ ": No group approval request found";
+	public static final String USER_DOES_NOT_HAVE_ACCESS_TO_ADD_MEMBER_GROUP = "UM1013 " + HttpStatus.UNAUTHORIZED.value()
+	+ ": The user has no access to add a member to the group";
 }

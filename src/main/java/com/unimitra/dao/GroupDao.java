@@ -15,7 +15,7 @@ import com.unimitra.exception.UnimitraException;
 public interface GroupDao {
 
 
-	List<Integer> getGroupIdData(String groupName) throws UnimitraException;
+	GroupEntity getGroupIdData(String groupName) throws UnimitraException;
 
 	String addMemberToGroupData(GroupMemberEntity groupMemberEntity);
 

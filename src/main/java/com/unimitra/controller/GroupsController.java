@@ -1,6 +1,5 @@
 package com.unimitra.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import com.unimitra.entity.GroupEntity;
 import com.unimitra.exception.UnimitraException;
@@ -52,8 +50,8 @@ public class GroupsController {
 	}
 
 	@PostMapping("/add-member")
-	public String addMemberToGroup(@RequestParam int userId, @RequestParam String groupName) throws UnimitraException {
-		return groupService.addMemberToGroup(userId, groupName);
+	public String addMemberToGroup(@RequestParam int userIdToAdd, @RequestParam String groupName,@RequestParam int loggedInUserId) throws UnimitraException {
+		return groupService.addMemberToGroup(userIdToAdd, groupName, loggedInUserId);
 	}
 
 	@DeleteMapping("/deleteGroup")

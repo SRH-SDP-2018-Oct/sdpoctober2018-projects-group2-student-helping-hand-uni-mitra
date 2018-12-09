@@ -29,15 +29,25 @@ public class GroupServiceImpl implements GroupService {
 	GroupDao groupDao;
 
 	@Override
-	public String addMemberToGroup(int userId, String groupName) throws UnimitraException {
-		List<Integer> groupId = groupDao.getGroupIdData(groupName);
-		Timestamp time = new Timestamp(System.currentTimeMillis());
+	public String addMemberToGroup(int userId, String groupName, int loggedInUserId) throws UnimitraException {
+		GroupEntity groupsData = groupDao.getGroupIdData(groupName);
+		checkIfUserIsAdmin(groupsData, loggedInUserId);
+
 		GroupMemberEntity groupMemberEntity = new GroupMemberEntity();
+
+		Timestamp time = new Timestamp(System.currentTimeMillis());
 		groupMemberEntity.setMemberUserId(userId);
-		groupMemberEntity.setMemberGroupId(groupId.get(0));
+		groupMemberEntity.setMemberGroupId(groupsData.getGroupId());
 		groupMemberEntity.setGroupMemberIsActive(true);
 		groupMemberEntity.setGroupMemberCreationDateTime(time);
 		return groupDao.addMemberToGroupData(groupMemberEntity);
+
+	}
+
+	private void checkIfUserIsAdmin(GroupEntity groupsData, int loggedInUserId) throws UnimitraException {
+		if (groupsData.getGroupApprovalByUserId() != loggedInUserId) {
+			throw new UnimitraException(ErrorCodes.USER_DOES_NOT_HAVE_ACCESS_TO_ADD_MEMBER_GROUP);
+		}
 
 	}
 
@@ -97,5 +107,6 @@ public class GroupServiceImpl implements GroupService {
 		return listOfGroups;
 
 	}
+
 
 }

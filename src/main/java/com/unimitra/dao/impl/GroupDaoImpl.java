@@ -29,13 +29,13 @@ public class GroupDaoImpl implements GroupDao {
 	SessionFactory sessionFactory;
 
 	@Override
-	public List<Integer> getGroupIdData(String groupName) throws UnimitraException {
+	public GroupEntity getGroupIdData(String groupName) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
 		@SuppressWarnings("unchecked")
-		List<Integer> groupId = session.createQuery("select groupId from GroupEntity where groupName=:Name")
+		List<GroupEntity> groupData = session.createQuery("from GroupEntity where groupName=:Name")
 				.setParameter("Name", groupName).list();
-		nullCheckForEntity(groupId, ErrorCodes.GROUP_NOT_PRESENT);
-		return groupId;
+		nullCheckForEntity(groupData, ErrorCodes.GROUP_NOT_PRESENT);
+		return groupData.get(0);
 	}
 
 	@Override
@@ -67,11 +67,6 @@ public class GroupDaoImpl implements GroupDao {
 		return groupEntity;
 	}
 
-	private void nullCheckForEntity(List<Integer> groupId, String errorCode) throws UnimitraException {
-		if (ObjectUtils.isEmpty(groupId)) {
-			throw new UnimitraException(errorCode);
-		}
-	}
 
 	private boolean flase;
 
