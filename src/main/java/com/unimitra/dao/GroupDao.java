@@ -2,14 +2,11 @@ package com.unimitra.dao;
 
 import java.util.List;
 
-
-import com.unimitra.entity.GroupMemberEntity;
-
 import org.springframework.http.ResponseEntity;
 
 import com.unimitra.entity.CategoryEntity;
 import com.unimitra.entity.GroupEntity;
-
+import com.unimitra.entity.GroupMemberEntity;
 import com.unimitra.exception.UnimitraException;
 
 public interface GroupDao {
@@ -34,4 +31,6 @@ public interface GroupDao {
 	List<GroupEntity> getGroupListByGroupName(String groupName) throws UnimitraException;
 
 	public int getGroupIdFromGroupName(String groupName) throws UnimitraException;
+	
+	String decideGroupStatus(GroupEntity groupEntity);
 }

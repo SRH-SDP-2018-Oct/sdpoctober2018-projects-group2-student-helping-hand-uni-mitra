@@ -12,6 +12,8 @@ import com.unimitra.model.GroupModel;
 @Service
 public interface GroupService {
 
+
+	String decideGroupService(GroupEntity groupEntity);
 	String addMemberToGroup(int userId, String groupName) throws UnimitraException;
 
 	List<GroupModel> getPendingRequest(int userId) throws UnimitraException;

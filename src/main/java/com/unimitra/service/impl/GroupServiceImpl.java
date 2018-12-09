@@ -29,6 +29,13 @@ public class GroupServiceImpl implements GroupService {
 	GroupDao groupDao;
 
 	@Override
+	public String decideGroupService(GroupEntity groupEntity) {
+
+		return groupDao.decideGroupStatus(groupEntity);
+
+	}
+
+	@Override
 	public String addMemberToGroup(int userId, String groupName) throws UnimitraException {
 		List<Integer> groupId = groupDao.getGroupIdData(groupName);
 		Timestamp time = new Timestamp(System.currentTimeMillis());

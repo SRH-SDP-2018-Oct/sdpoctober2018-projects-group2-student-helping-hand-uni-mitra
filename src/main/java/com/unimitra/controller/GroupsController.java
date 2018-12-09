@@ -1,6 +1,5 @@
 package com.unimitra.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.unimitra.entity.GroupEntity;
 import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.GroupModel;
@@ -23,8 +21,9 @@ import com.unimitra.service.GroupService;
 @RequestMapping("/groups")
 public class GroupsController {
 
-	@Autowired
-	GroupService groupService;
+@Autowired
+GroupService groupService;
+
 
 	@PostMapping("/createGroup")
 	public ResponseEntity<String> createGroup(@RequestBody GroupEntity groupEntity) throws UnimitraException {
@@ -46,9 +45,8 @@ public class GroupsController {
 	}
 
 	@PostMapping("/decide-approval")
-	public String decideGroupStatus(@RequestParam int groupId, @RequestParam int approvedByUserId,
-			@RequestParam String approvalStatus) {
-		return "Approved/Rejected";
+	public String decideGroupStatus(@RequestBody GroupEntity groupEntity) {
+		return groupService.decideGroupService(groupEntity);
 	}
 
 	@PostMapping("/add-member")

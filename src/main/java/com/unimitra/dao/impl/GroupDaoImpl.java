@@ -36,8 +36,6 @@ public class GroupDaoImpl implements GroupDao {
 		List<Integer> groupId = session.createQuery("select groupId from GroupEntity where groupName=:Name")
 				.setParameter("Name", groupName).list();
 		UnimitraUtility.nullCheckForEntity(groupId, ErrorCodes.GROUP_NOT_PRESENT);
-		
-		//UnimitraUtility
 		return groupId;
 	}
 
@@ -68,12 +66,6 @@ public class GroupDaoImpl implements GroupDao {
 				.setParameter("userIdForQuery", userId).setParameter("statusForQuery", "Pending").list();
 		UnimitraUtility.nullCheckForEntity(groupEntity, ErrorCodes.NO_GROUP_APPROVAL_REQUEST);
 		return groupEntity;
-	}
-
-	private void nullCheckForEntity(List<Integer> groupId, String errorCode) throws UnimitraException {
-		if (ObjectUtils.isEmpty(groupId)) {
-			throw new UnimitraException(errorCode);
-		}
 	}
 
 	private boolean flase;
@@ -170,6 +162,20 @@ public class GroupDaoImpl implements GroupDao {
 			throw new UnimitraException(ErrorCodes.GROUP_DOES_NOT_EXIST);
 		}
 		return groupMemberEntity.get(0).getGroupId();
+	}
+
+	@Override
+	public String decideGroupStatus(GroupEntity groupEntity) {
+
+		Session session = sessionFactory.getCurrentSession();
+		GroupEntity updateGroupData = session.get(GroupEntity.class, groupEntity.getGroupId());
+		if (updateGroupData.getGroupApprovalStatus().equals("Pending")) {
+			updateGroupData.setGroupApprovalStatus(groupEntity.getGroupApprovalStatus());
+			session.update(updateGroupData);
+			return "Group Status Updated";
+		}
+		return "Action already taken";
+
 	}
 
 	@Autowired
