@@ -12,6 +12,7 @@ import com.unimitra.dao.UserDetailsDao;
 import com.unimitra.entity.UserDetailsEntity;
 import com.unimitra.exception.ErrorCodes;
 import com.unimitra.exception.UnimitraException;
+import com.unimitra.utility.UnimitraUtility;
 
 @Repository
 public class UserDetailsDaoImpl implements UserDetailsDao {
@@ -23,7 +24,7 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
 		Session session = sessionFactory.getCurrentSession();
 		UserDetailsEntity userDetailEntity ;
 		userDetailEntity = session.get(UserDetailsEntity.class, userId);
-		nullCheckForEntity(userDetailEntity, ErrorCodes.USER_NOT_PRESENT);
+		UnimitraUtility.nullCheckForEntity(userDetailEntity, ErrorCodes.USER_NOT_PRESENT);
 		return userDetailEntity;
 	}
 
@@ -73,10 +74,4 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
 		this.sessionFactory = sessionFactory;
 	}
 	
-	private void nullCheckForEntity(Object entity, String errorCode) throws UnimitraException {
-		if (ObjectUtils.isEmpty(entity)) {
-			throw new UnimitraException(errorCode);
-		}
-	}
-
 }

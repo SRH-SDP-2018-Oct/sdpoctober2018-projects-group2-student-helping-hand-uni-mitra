@@ -21,6 +21,7 @@ import com.unimitra.entity.QuestionsEntity;
 import com.unimitra.exception.ErrorCodes;
 import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.DiscussionModel;
+import com.unimitra.utility.UnimitraUtility;
 
 @Repository
 public class DiscussionDaoImpl implements DiscussionDao {
@@ -186,22 +187,17 @@ public class DiscussionDaoImpl implements DiscussionDao {
 
 	private AnswersEntity getAnswersEntity(Integer answerId, Session session) throws UnimitraException {
 		AnswersEntity answersEntity = session.get(AnswersEntity.class, answerId);
-		nullCheckForEntity(answersEntity, ErrorCodes.ANSWER_NOT_PRESENT);
+		UnimitraUtility.nullCheckForEntity(answersEntity, ErrorCodes.ANSWER_NOT_PRESENT);
 		return answersEntity;
 	}
 
 	private QuestionsEntity getQuestionEntity(Integer questionId, Session session) throws UnimitraException {
 		QuestionsEntity questionEntity = session.get(QuestionsEntity.class, questionId);
-		nullCheckForEntity(questionEntity, ErrorCodes.QUESTION_NOT_PRESENT);
+		UnimitraUtility.nullCheckForEntity(questionEntity, ErrorCodes.QUESTION_NOT_PRESENT);
 		return questionEntity;
 	}
 
-	private void nullCheckForEntity(Object entity, String errorCode) throws UnimitraException {
-		if (ObjectUtils.isEmpty(entity)) {
-			throw new UnimitraException(errorCode);
-		}
-	}
-
+	
 	@Autowired
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
