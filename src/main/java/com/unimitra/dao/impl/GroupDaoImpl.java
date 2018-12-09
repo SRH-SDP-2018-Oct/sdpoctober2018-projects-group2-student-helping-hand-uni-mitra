@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 
 import com.unimitra.dao.GroupDao;
 import com.unimitra.entity.CategoryEntity;

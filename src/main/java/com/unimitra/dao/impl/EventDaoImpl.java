@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.ObjectUtils;
 
 import com.unimitra.dao.EventDao;
 import com.unimitra.entity.EventsEntity;
@@ -50,7 +49,7 @@ public class EventDaoImpl implements EventDao {
 	public ResponseEntity<String> deleteEventById(int eventId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
 		EventsEntity deleteEventById = session.get(EventsEntity.class, eventId);
-		nullCheckForEntity(deleteEventById, ErrorCodes.EVENT_NOT_PRESENT_FOR_EVENTID);
+		UnimitraUtility.nullCheckForEntity(deleteEventById, ErrorCodes.EVENT_NOT_PRESENT_FOR_EVENTID);
 
 		deleteEventById.setEventIsActive(flase);
 		session.update(deleteEventById);

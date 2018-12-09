@@ -13,7 +13,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 
 import com.unimitra.dao.DiscussionDao;
 import com.unimitra.entity.AnswersEntity;
