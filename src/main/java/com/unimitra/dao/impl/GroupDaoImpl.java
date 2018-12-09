@@ -23,6 +23,7 @@ import com.unimitra.entity.GroupEntity;
 import com.unimitra.entity.GroupMemberEntity;
 import com.unimitra.exception.ErrorCodes;
 import com.unimitra.exception.UnimitraException;
+import com.unimitra.utility.UnimitraUtility;
 
 @Repository
 public class GroupDaoImpl implements GroupDao {
@@ -34,7 +35,7 @@ public class GroupDaoImpl implements GroupDao {
 		@SuppressWarnings("unchecked")
 		List<Integer> groupId = session.createQuery("select groupId from GroupEntity where groupName=:Name")
 				.setParameter("Name", groupName).list();
-		nullCheckForEntity(groupId, ErrorCodes.GROUP_NOT_PRESENT);
+		UnimitraUtility.nullCheckForEntity(groupId, ErrorCodes.GROUP_NOT_PRESENT);
 		return groupId;
 	}
 
@@ -63,14 +64,8 @@ public class GroupDaoImpl implements GroupDao {
 		groupEntity = session.createQuery(
 				"from GroupEntity where groupApprovalByUserId =: userIdForQuery and groupApprovalStatus=: statusForQuery")
 				.setParameter("userIdForQuery", userId).setParameter("statusForQuery", "Pending").list();
-		nullCheckForEntity(groupEntity, ErrorCodes.NO_GROUP_APPROVAL_REQUEST);
+		UnimitraUtility.nullCheckForEntity(groupEntity, ErrorCodes.NO_GROUP_APPROVAL_REQUEST);
 		return groupEntity;
-	}
-
-	private void nullCheckForEntity(List<Integer> groupId, String errorCode) throws UnimitraException {
-		if (ObjectUtils.isEmpty(groupId)) {
-			throw new UnimitraException(errorCode);
-		}
 	}
 
 	private boolean flase;
@@ -87,7 +82,7 @@ public class GroupDaoImpl implements GroupDao {
 	public ResponseEntity<String> deleteGroupbyGroupId(int groupId) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
 		GroupEntity deleteGroupByGroupId = session.get(GroupEntity.class, groupId);
-		nullCheckForEntity(deleteGroupByGroupId, ErrorCodes.GROUP_NOT_PRESENT_FOR_GROUPID);
+		UnimitraUtility.nullCheckForEntity(deleteGroupByGroupId, ErrorCodes.GROUP_NOT_PRESENT_FOR_GROUPID);
 
 		deleteGroupByGroupId.setGroupIsActive(flase);
 		session.update(deleteGroupByGroupId);
@@ -167,12 +162,6 @@ public class GroupDaoImpl implements GroupDao {
 			throw new UnimitraException(ErrorCodes.GROUP_DOES_NOT_EXIST);
 		}
 		return groupMemberEntity.get(0).getGroupId();
-	}
-
-	private void nullCheckForEntity(Object entity, String errorCode) throws UnimitraException {
-		if (ObjectUtils.isEmpty(entity)) {
-			throw new UnimitraException(errorCode);
-		}
 	}
 
 	@Override
