@@ -12,9 +12,9 @@ import com.unimitra.model.GroupModel;
 @Service
 public interface GroupService {
 
-
 	String decideGroupService(GroupEntity groupEntity);
-	String addMemberToGroup(int userId, String groupName) throws UnimitraException;
+
+	String addMemberToGroup(int userId, String groupName, int loggedInUserId) throws UnimitraException;
 
 	List<GroupModel> getPendingRequest(int userId) throws UnimitraException;
 
