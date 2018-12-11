@@ -17,7 +17,7 @@ public interface DiscussionDao {
 
 	public void deleteAnswer(Integer answerId) throws UnimitraException;
 
-	public int getAnswerPosterUserId(Integer questionId) throws UnimitraException;
+	public int getAnswerPosterUserId(Integer answerId) throws UnimitraException;
 
 	public void deletAllAnswersOfQuestion(Integer questionId) throws UnimitraException;
 

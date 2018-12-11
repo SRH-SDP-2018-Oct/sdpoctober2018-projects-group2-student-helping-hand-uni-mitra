@@ -2,6 +2,8 @@ package com.unimitra.controller;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +19,7 @@ import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.AnswerModel;
 import com.unimitra.model.DiscussionModel;
 import com.unimitra.service.DiscussionService;
+import com.unimitra.utility.UnimitraConstants;
 
 @RestController
 @RequestMapping("/discussion")
@@ -24,25 +27,32 @@ public class DiscussionController {
 
 	@Autowired
 	DiscussionService discussionService;
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	@PostMapping("/post-question")
-	public ResponseEntity<String> postQuestions(@RequestBody DiscussionModel question) throws UnimitraException {
-		return discussionService.postQuestion(question);
+	public ResponseEntity<String> postQuestions(@RequestBody DiscussionModel questionModel) throws UnimitraException {
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + questionModel.toString());
+		return discussionService.postQuestion(questionModel);
 	}
 
 	@PostMapping("/answer-question")
-	public ResponseEntity<String> answerQuestions(@RequestBody AnswerModel answer) throws UnimitraException {
-		return discussionService.answerQuestion(answer);
+	public ResponseEntity<String> answerQuestions(@RequestBody AnswerModel answerModel) throws UnimitraException {
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + answerModel.toString());
+		return discussionService.answerQuestion(answerModel);
 	}
 
 	@DeleteMapping("/delete")
 	public ResponseEntity<String> deleteQuestionsOrAnswers(@RequestParam(required = false) Integer questionId,
-			@RequestParam(required = false) Integer answerId, @RequestParam Integer userId, @RequestParam(required = false) Integer groupId) throws UnimitraException {
+			@RequestParam(required = false) Integer answerId, @RequestParam Integer userId,
+			@RequestParam(required = false) Integer groupId) throws UnimitraException {
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + "questionId {}, answerId {}, userId {}, goupId {}", questionId,
+				answerId, userId, groupId);
 		return discussionService.delete(questionId, answerId, userId, groupId);
 	}
 
 	@PutMapping("/close-thread")
 	public ResponseEntity<String> closeThread(@RequestBody DiscussionModel discussionModel) throws UnimitraException {
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + discussionModel.toString());
 		return discussionService.closeDiscussionThread(discussionModel);
 	}
 
@@ -50,6 +60,8 @@ public class DiscussionController {
 	public ResponseEntity<List<DiscussionModel>> detailedSearch(@RequestParam(required = false) String searchString,
 			@RequestParam(required = false) String category, @RequestParam(required = false) String groupName,
 			@RequestParam(required = false) Integer userId) throws UnimitraException {
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + "searchString {}, category {}, goupId {}, userId {}", searchString,
+				category, groupName, userId);
 		return discussionService.getDiscussions(searchString, category, groupName, userId);
 	}
 }

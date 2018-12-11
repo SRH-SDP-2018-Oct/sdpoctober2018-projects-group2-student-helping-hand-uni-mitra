@@ -9,9 +9,11 @@ import com.unimitra.entity.AnswersEntity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @JsonInclude(Include.NON_NULL)
 public class DiscussionModel {
 	private Integer questionId;
