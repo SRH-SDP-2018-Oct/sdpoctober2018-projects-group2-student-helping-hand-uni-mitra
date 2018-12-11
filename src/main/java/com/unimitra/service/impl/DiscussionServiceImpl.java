@@ -51,7 +51,6 @@ public class DiscussionServiceImpl implements DiscussionService {
 			checkIfUserHasAccessToGroup(discussionModel.getUserId(), questionGroupId);
 			questionEntity.setQuestionGroupId(questionGroupId);
 		}
-
 		discussionDao.postQuestions(questionEntity);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
@@ -74,15 +73,15 @@ public class DiscussionServiceImpl implements DiscussionService {
 	public ResponseEntity<String> delete(Integer questionId, Integer answerId, Integer userId, Integer groupId)
 			throws UnimitraException {
 		validateDeleteDiscussionRequest(questionId, answerId);
-		if (ObjectUtils.isEmpty(groupId)) {
+		if (!ObjectUtils.isEmpty(groupId)) {
 			checkIfUserHasAccessToGroup(userId, groupId);
 		}
 		if (!(ObjectUtils.isEmpty(questionId))) {
-			deleteQuestionIfAddedByUser(questionId, userId);
+			deleteQuestion(questionId, userId);
 		} else {
-			deleteAnswerIfAddedByUser(answerId, userId);
+			deleteAnswer(answerId, userId);
 		}
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@Override
@@ -93,7 +92,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 		if (isUserStaff(userId)) {
 			discussionDao.closeQuestionThread(questionId, isDiscussionThreadActive);
 		}
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@Override
@@ -102,16 +101,24 @@ public class DiscussionServiceImpl implements DiscussionService {
 		ResponseEntity<List<DiscussionModel>> response = null;
 		if (StringUtils.isNotEmpty(searchString) && StringUtils.isEmpty(category) && StringUtils.isEmpty(groupName)
 				&& ObjectUtils.isEmpty(userId)) {
+			
 			response = searchOnKeyword(searchString);
+			
 		} else if (StringUtils.isEmpty(searchString) && StringUtils.isNotEmpty(category)
 				&& StringUtils.isEmpty(groupName) && ObjectUtils.isEmpty(userId)) {
+			
 			response = searchOnCategory(category);
+			
 		} else if (StringUtils.isNotEmpty(searchString) && StringUtils.isEmpty(category)
 				&& StringUtils.isNotEmpty(groupName) && !ObjectUtils.isEmpty(userId)) {
+			
 			response = searchOnKeywordInGroup(searchString, groupName, userId);
+			
 		} else if (StringUtils.isEmpty(searchString) && StringUtils.isNotEmpty(category)
 				&& StringUtils.isNotEmpty(groupName) && !ObjectUtils.isEmpty(userId)) {
+			
 			response = searchOnCategoryInGroup(category, groupName, userId);
+			
 		} else {
 			throw new UnimitraException(ErrorCodes.INVALID_SEARCH_REQUEST);
 		}
@@ -163,7 +170,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 		return userDetailsDao.getUserDetails(userId).getUserType().equals("Staff");
 	}
 
-	private void deleteAnswerIfAddedByUser(Integer answerId, Integer userId) throws UnimitraException {
+	private void deleteAnswer(Integer answerId, Integer userId) throws UnimitraException {
 		if (discussionDao.getAnswerPosterUserId(answerId) == userId || isUserStaff(userId)) {
 			discussionDao.deleteAnswer(answerId);
 		} else {
@@ -171,7 +178,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 		}
 	}
 
-	private void deleteQuestionIfAddedByUser(Integer questionId, Integer userId) throws UnimitraException {
+	private void deleteQuestion(Integer questionId, Integer userId) throws UnimitraException {
 		if (discussionDao.getQuestionEntityFromQuestionId(questionId).getQuestionPostedByUserId() == userId
 				|| isUserStaff(userId)) {
 			discussionDao.deleteQuestion(questionId);

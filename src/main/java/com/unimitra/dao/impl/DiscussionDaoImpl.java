@@ -96,10 +96,8 @@ public class DiscussionDaoImpl implements DiscussionDao {
 
 		criteriaQuery.where(
 				criteriaBuilder.like(
-						criteriaBuilder.lower(questionsRoot
-								.get(type.getDeclaredSingularAttribute("questionDescription", String.class))),
-						"%" + searchString.toLowerCase() + "%"),
-				criteriaBuilder.equal(questionsRoot.get("isQuestionActive"), true));
+						criteriaBuilder.lower(questionsRoot.get(type.getDeclaredSingularAttribute("questionDescription", String.class))),"%" + searchString.toLowerCase() + "%"),
+						criteriaBuilder.equal(questionsRoot.get("isQuestionActive"), true));
 
 		List<QuestionsEntity> listOfQuestionsWithGivenCategory = session.createQuery(criteriaQuery).getResultList();
 		getListOfDiscussionModelFromQuestionsEntity(listOfQuestionsWithGivenCategory);
