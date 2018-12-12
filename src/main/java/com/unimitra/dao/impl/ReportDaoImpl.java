@@ -20,7 +20,6 @@ public class ReportDaoImpl implements ReportDao {
 	@Override
 	public List<DiscussionReportModel> getDiscussionReportData() {
 		Session session = sessionFactory.getCurrentSession();
-		// DiscussionReportModel discussionReportModel=new DiscussionReportModel();
 		@SuppressWarnings("unchecked")
 
 		List<Object[]> source=(List<Object[]>) session.createNativeQuery("select que.question_description,que.question_posted_by_user,que.question_creation_date_time,ans.answer_description,ans.answer_posted_by_user,ans.answer_date_time, ans.answer_status from \r\n" + 
