@@ -16,10 +16,12 @@ public interface EventsService {
 
 	EventsEntity getEventDetailById(int eventId) throws UnimitraException;
 
-	ResponseEntity<String> deleteEventById(int eventId) throws UnimitraException;
+	ResponseEntity<String> deleteEventById(int eventId, int createdByuserId) throws UnimitraException;
 
 	EventsEntity postEvent(EventsEntity postEvent);
 
 	ResponseEntity<String> registrationForEvent(EventsRegisterationEntity registerForEvent) throws UnimitraException;
+
+	EventsEntity editEvent(EventsEntity editEvent, int userId) throws UnimitraException;
 
 }

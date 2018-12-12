@@ -44,6 +44,17 @@ public class EventDaoImpl implements EventDao {
 		return eventByEventId;
 
 	}
+	
+
+	@Override
+	public EventsEntity updateEvent(EventsEntity editEvent) throws UnimitraException {
+		Session session = sessionFactory.getCurrentSession();
+		EventsEntity deleteEventById = session.get(EventsEntity.class, editEvent.getEventId());
+		UnimitraUtility.nullCheckForEntity(deleteEventById, ErrorCodes.EVENT_NOT_PRESENT_FOR_EVENTID);
+		session.update(editEvent);
+		return null;
+	}
+
 
 	@Override
 	public ResponseEntity<String> deleteEventById(int eventId) throws UnimitraException {
@@ -82,13 +93,6 @@ public class EventDaoImpl implements EventDao {
 		session.saveOrUpdate(registerForEvent);
 
 		return registerForEvent;
-
-	}
-
-	@Override
-	public void updateExsistingRegistrationFlag(EventsRegisterationEntity eventsRegistrationEntity1) {
-		Session session = sessionFactory.getCurrentSession();
-		session.update(eventsRegistrationEntity1);
 
 	}
 

@@ -20,6 +20,7 @@ import com.unimitra.entity.EventsEntity;
 import com.unimitra.entity.EventsRegisterationEntity;
 import com.unimitra.exception.UnimitraException;
 import com.unimitra.service.EventsService;
+import com.unimitra.utility.UnimitraConstants;
 
 @RestController
 @RequestMapping("/events")
@@ -32,31 +33,46 @@ public class EventController {
 	@GetMapping("/get-all-details")
 	public List<EventsEntity> getAllEventDetails() throws UnimitraException {
 		List<EventsEntity> eventList = eventsService.getEventDetails();
-		LOGGER.info("UNIMITRA-AUDIT " + eventList.toString());
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + eventList.toString());
 		return ObjectUtils.isEmpty(eventList) ? new ArrayList<>() : eventList;
 	}
 
 	@GetMapping("/get-details-by-id")
 	public EventsEntity getEventDetail(@RequestParam int eventId) throws UnimitraException {
-		return eventsService.getEventDetailById(eventId);
+		EventsEntity eventByEventId = eventsService.getEventDetailById(eventId);
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + eventByEventId.toString());
+		return eventByEventId;
+
+	}
+	
+	@PostMapping("/editEvent")
+	public EventsEntity editEvent(@RequestBody EventsEntity editEvent, @RequestParam int userId) throws UnimitraException {
+		EventsEntity event = eventsService.editEvent(editEvent,userId);
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + event.toString());
+		return event;
 
 	}
 
 	@DeleteMapping("/delete")
-	public ResponseEntity<String> deleteEvent(@RequestParam int eventId) throws UnimitraException {
-		return eventsService.deleteEventById(eventId);
+	public ResponseEntity<String> deleteEvent(@RequestParam int eventId, @RequestParam int createdByuserId)
+			throws UnimitraException {
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + "eventId {}, createdByuserId {}", eventId, createdByuserId);
+		return eventsService.deleteEventById(eventId, createdByuserId);
 
 	}
 
 	@PostMapping("/postEvent")
 	public EventsEntity postEvent(@RequestBody EventsEntity postEvent) {
-		return eventsService.postEvent(postEvent);
+		EventsEntity event = eventsService.postEvent(postEvent);
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + event.toString());
+		return event;
 
 	}
 
 	@PostMapping("/registerForEvent")
 	public ResponseEntity<String> registerForEvent(@RequestBody EventsRegisterationEntity registerForEvent)
 			throws UnimitraException {
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + registerForEvent.toString());
 		return eventsService.registrationForEvent(registerForEvent);
 
 	}
