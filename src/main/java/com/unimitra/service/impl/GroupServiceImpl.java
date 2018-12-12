@@ -52,7 +52,7 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	private void checkIfUserIsAdmin(GroupEntity groupsData, int loggedInUserId) throws UnimitraException {
-		if (groupsData.getGroupApprovalByUserId() != loggedInUserId) {
+		if (groupsData.getGroupCreatedByUserId() != loggedInUserId) {
 			throw new UnimitraException(ErrorCodes.USER_HAS_NO_ACCESS_TO_ADD_MEMBER_TO_GROUP);
 		}
 	}
