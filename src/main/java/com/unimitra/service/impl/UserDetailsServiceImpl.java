@@ -58,7 +58,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		UserDetailsEntity userData = userDetailsDao.getUserDetails(userId);
 		UserDetailsModel userModelList = new UserDetailsModel();
-
+		
+		userModelList.setUserId(userId);
 		userModelList.setFirstName(userData.getFirstName());
 		userModelList.setLastName(userData.getLastName());
 		userModelList.setEmailId(userData.getEmailId());
