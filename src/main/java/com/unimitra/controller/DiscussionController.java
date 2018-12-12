@@ -31,13 +31,13 @@ public class DiscussionController {
 
 	@PostMapping("/post-question")
 	public ResponseEntity<String> postQuestions(@RequestBody DiscussionModel questionModel) throws UnimitraException {
-		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + questionModel.toString());
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + UnimitraConstants.POST_QUESTION + questionModel.toString());
 		return discussionService.postQuestion(questionModel);
 	}
 
 	@PostMapping("/answer-question")
 	public ResponseEntity<String> answerQuestions(@RequestBody AnswerModel answerModel) throws UnimitraException {
-		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + answerModel.toString());
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + UnimitraConstants.ANSWER_QUESTION + answerModel.toString());
 		return discussionService.answerQuestion(answerModel);
 	}
 
@@ -45,14 +45,14 @@ public class DiscussionController {
 	public ResponseEntity<String> deleteQuestionsOrAnswers(@RequestParam(required = false) Integer questionId,
 			@RequestParam(required = false) Integer answerId, @RequestParam Integer userId,
 			@RequestParam(required = false) Integer groupId) throws UnimitraException {
-		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + "questionId {}, answerId {}, userId {}, goupId {}", questionId,
-				answerId, userId, groupId);
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + UnimitraConstants.DELETE_DISCUSSION
+				+ "questionId {}, answerId {}, userId {}, goupId {}", questionId, answerId, userId, groupId);
 		return discussionService.delete(questionId, answerId, userId, groupId);
 	}
 
 	@PutMapping("/close-thread")
 	public ResponseEntity<String> closeThread(@RequestBody DiscussionModel discussionModel) throws UnimitraException {
-		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + discussionModel.toString());
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + UnimitraConstants.CLOSE_THREAD + discussionModel.toString());
 		return discussionService.closeDiscussionThread(discussionModel);
 	}
 
@@ -60,8 +60,10 @@ public class DiscussionController {
 	public ResponseEntity<List<DiscussionModel>> detailedSearch(@RequestParam(required = false) String searchString,
 			@RequestParam(required = false) String category, @RequestParam(required = false) String groupName,
 			@RequestParam(required = false) Integer userId) throws UnimitraException {
-		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + "searchString {}, category {}, goupId {}, userId {}", searchString,
-				category, groupName, userId);
+		LOGGER.info(
+				UnimitraConstants.UNI_MITRA_AUDIT + UnimitraConstants.SEARCH_DISCUSSION
+						+ "searchString {}, category {}, goupId {}, userId {}",
+				searchString, category, groupName, userId);
 		return discussionService.getDiscussions(searchString, category, groupName, userId);
 	}
 }

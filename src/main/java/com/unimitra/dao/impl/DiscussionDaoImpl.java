@@ -156,8 +156,9 @@ public class DiscussionDaoImpl implements DiscussionDao {
 	private List<DiscussionModel> getListOfDiscussionModelFromQuestionsEntity(
 			List<QuestionsEntity> listOfQuestionsWithGivenCategory) {
 		List<DiscussionModel> listOfDiscussionModel = new ArrayList<>();
-		DiscussionModel discussionModel = new DiscussionModel();
+		
 		listOfQuestionsWithGivenCategory.forEach(questionEntity -> {
+			DiscussionModel discussionModel = new DiscussionModel();
 			discussionModel.setQuestionId(questionEntity.getQuestionId());
 			discussionModel.setQuestion(questionEntity.getQuestionDescription());
 			discussionModel.setUserId(questionEntity.getQuestionPostedByUserId());
@@ -178,7 +179,8 @@ public class DiscussionDaoImpl implements DiscussionDao {
 		CriteriaQuery<AnswersEntity> criteriaQuery = criteriaBuilder.createQuery(AnswersEntity.class);
 		Root<AnswersEntity> questionsRoot = criteriaQuery.from(AnswersEntity.class);
 		criteriaQuery.select(questionsRoot);
-		criteriaQuery.where(criteriaBuilder.equal(questionsRoot.get("questionId"), questionId));
+		criteriaQuery.where(criteriaBuilder.equal(questionsRoot.get("questionId"), questionId),
+							criteriaBuilder.equal(questionsRoot.get("answerIsActive"), true));
 		return session.createQuery(criteriaQuery).getResultList();
 	}
 
