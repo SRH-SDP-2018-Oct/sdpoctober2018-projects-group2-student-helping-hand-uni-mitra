@@ -12,7 +12,7 @@ import com.unimitra.exception.UnimitraException;
 public interface GroupDao {
 
 
-	GroupEntity getGroupData(String groupName) throws UnimitraException;
+	GroupEntity getGroupIdData(String groupName) throws UnimitraException;
 
 	String addMemberToGroupData(GroupMemberEntity groupMemberEntity);
 
@@ -32,5 +32,5 @@ public interface GroupDao {
 
 	public int getGroupIdFromGroupName(String groupName) throws UnimitraException;
 	
-	String decideGroupStatus(GroupEntity groupEntity);
+	String decideGroupStatus(GroupEntity groupEntity,int userId);
 }

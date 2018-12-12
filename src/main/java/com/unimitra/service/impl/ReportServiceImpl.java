@@ -51,7 +51,7 @@ public class ReportServiceImpl implements ReportService {
 		JRBeanCollectionDataSource discussionForumsJRBean = new JRBeanCollectionDataSource(listDiscussionReportData);
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("DiscussionForumDataSource", discussionForumsJRBean);
-		String message = "";
+		String discussionReportPDF = "";
 		try {
 			String jrxmlFileName = "src/main/resources/template_DiscussionForum.jrxml";
 			JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlFileName);
@@ -62,13 +62,12 @@ public class ReportServiceImpl implements ReportService {
 			String outputFile = userHomeDirectory + File.separatorChar + "DiscussionForumReport_" + timeStamp + ".pdf";
 			OutputStream outputStream = new FileOutputStream(new File(outputFile));
 			JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-			String successMessage="File Generated Successfuly @ ";
-			String outputFilePath=userHomeDirectory + File.separatorChar+ "DiscussionForumReport_" + timeStamp + ".pdf";
-			message = successMessage + outputFilePath;
+			discussionReportPDF=userHomeDirectory + File.separatorChar+ "DiscussionForumReport_" + timeStamp + ".pdf";
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return message;
+		return discussionReportPDF;
 	}
 
 	private void checkIfUserIsStaff(int userId) throws UnimitraException {

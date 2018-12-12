@@ -29,19 +29,20 @@ public class GroupServiceImpl implements GroupService {
 	GroupDao groupDao;
 
 	@Override
-	public String decideGroupService(GroupEntity groupEntity) {
+	public String decideGroupService(GroupEntity groupEntity,int userId) {
 
-		return groupDao.decideGroupStatus(groupEntity);
+		return groupDao.decideGroupStatus(groupEntity,userId);
 
 	}
 
 	@Override
 	public String addMemberToGroup(int userId, String groupName, int loggedInUserId) throws UnimitraException {
-		GroupEntity groupsData = groupDao.getGroupData(groupName);
+		GroupEntity groupsData = groupDao.getGroupIdData(groupName);
 		checkIfUserIsAdmin(groupsData, loggedInUserId);
-		
-		Timestamp time = new Timestamp(System.currentTimeMillis());
+
 		GroupMemberEntity groupMemberEntity = new GroupMemberEntity();
+
+		Timestamp time = new Timestamp(System.currentTimeMillis());
 		groupMemberEntity.setMemberUserId(userId);
 		groupMemberEntity.setMemberGroupId(groupsData.getGroupId());
 		groupMemberEntity.setGroupMemberIsActive(true);
@@ -49,12 +50,11 @@ public class GroupServiceImpl implements GroupService {
 		return groupDao.addMemberToGroupData(groupMemberEntity);
 
 	}
-	
+
 	private void checkIfUserIsAdmin(GroupEntity groupsData, int loggedInUserId) throws UnimitraException {
 		if (groupsData.getGroupApprovalByUserId() != loggedInUserId) {
 			throw new UnimitraException(ErrorCodes.USER_HAS_NO_ACCESS_TO_ADD_MEMBER_TO_GROUP);
 		}
-
 	}
 
 	@SuppressWarnings("unchecked")

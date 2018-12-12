@@ -52,17 +52,17 @@ public class GroupsController {
 	}
 
 	@PostMapping("/decide-approval")
-	public String decideGroupStatus(@RequestBody GroupEntity groupEntity) {
-		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + groupEntity.toString());
-		return groupService.decideGroupService(groupEntity);
+
+	public String decideGroupStatus(@RequestBody GroupEntity groupEntity,@RequestParam int userId) {
+	  LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + groupEntity.toString());
+    return groupService.decideGroupService(groupEntity,userId);
 	}
 
 	@PostMapping("/add-member")
-	public String addMemberToGroup(@RequestParam int userId, @RequestParam String groupName,
-			@RequestParam int loggedInUserId) throws UnimitraException {
+	public String addMemberToGroup(@RequestParam int userIdToAdd, @RequestParam String groupName,@RequestParam int loggedInUserId) throws UnimitraException {
 		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + "userId {}, groupName {}, loggedInUserId {}", userId, groupName,
 				loggedInUserId);
-		return groupService.addMemberToGroup(userId, groupName, loggedInUserId);
+    return groupService.addMemberToGroup(userIdToAdd, groupName, loggedInUserId);
 	}
 
 	@DeleteMapping("/deleteGroup")

@@ -29,10 +29,10 @@ public class GroupDaoImpl implements GroupDao {
 	SessionFactory sessionFactory;
 
 	@Override
-	public GroupEntity getGroupData(String groupName) throws UnimitraException {
+	public GroupEntity getGroupIdData(String groupName) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
 		@SuppressWarnings("unchecked")
-		List<GroupEntity> groupData = session.createQuery("from GroupEntity where groupName=:Name")
+		List<GroupEntity> groupData = session.createQuery("from GroupEntity where groupName=:Name and groupIsActive = true")
 				.setParameter("Name", groupName).list();
 		UnimitraUtility.nullCheckForEntity(groupData, ErrorCodes.GROUP_NOT_PRESENT);
 		return groupData.get(0);
@@ -164,16 +164,16 @@ public class GroupDaoImpl implements GroupDao {
 	}
 
 	@Override
-	public String decideGroupStatus(GroupEntity groupEntity) {
+	public String decideGroupStatus(GroupEntity groupEntity,int userId) {
 
 		Session session = sessionFactory.getCurrentSession();
 		GroupEntity updateGroupData = session.get(GroupEntity.class, groupEntity.getGroupId());
-		if (updateGroupData.getGroupApprovalStatus().equals("Pending")) {
+		if (updateGroupData.getGroupApprovalStatus().equals("Pending") && updateGroupData.getGroupApprovalByUserId()== userId ) {
 			updateGroupData.setGroupApprovalStatus(groupEntity.getGroupApprovalStatus());
 			session.update(updateGroupData);
 			return "Group Status Updated";
 		}
-		return "Action already taken";
+		return "group is already approved or you dont have the permission to approve the group.";
 
 	}
 

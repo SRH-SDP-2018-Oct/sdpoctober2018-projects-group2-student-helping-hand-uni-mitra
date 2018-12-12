@@ -18,7 +18,7 @@
 		</RollingFile>
 
 		<RollingFile name="unimitraError"
-			fileName="${basePath}/unimitraError.err"
+			fileName="${basePath}/unimitra-error.err"
 			filePattern="${basePath}/unimitra-error-%d{yyyy-MM-dd}.err">
 			<RegexFilter regex=".*UNIMITRA-ERROR.*" onMatch="ACCEPT" onMismatch="DENY"/>
 			<PatternLayout>

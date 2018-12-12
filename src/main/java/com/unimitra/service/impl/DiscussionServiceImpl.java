@@ -6,6 +6,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import com.unimitra.exception.UnimitraException;
 import com.unimitra.model.AnswerModel;
 import com.unimitra.model.DiscussionModel;
 import com.unimitra.service.DiscussionService;
+import com.unimitra.utility.UnimitraConstants;
 
 @Service
 @Transactional
@@ -36,6 +39,8 @@ public class DiscussionServiceImpl implements DiscussionService {
 	UserDetailsDao userDetailsDao;
 	@Autowired
 	GroupDao groupDao;
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	@Override
 	public ResponseEntity<String> postQuestion(DiscussionModel discussionModel) throws UnimitraException {
@@ -52,6 +57,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 			questionEntity.setQuestionGroupId(questionGroupId);
 		}
 		discussionDao.postQuestions(questionEntity);
+		LOGGER.info(UnimitraConstants.POST_QUESTION + UnimitraConstants.COMPLETED + "{}", discussionModel.toString());
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
@@ -66,6 +72,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 		answersEntity.setAnswerPostedByUserId(answerModel.getUserId());
 		checkIfPostAnswerIsPossible(answerModel);
 		discussionDao.postAnswers(answersEntity);
+		LOGGER.info(UnimitraConstants.ANSWER_QUESTION + UnimitraConstants.COMPLETED + "{}", answerModel.toString());
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
@@ -81,6 +88,8 @@ public class DiscussionServiceImpl implements DiscussionService {
 		} else {
 			deleteAnswer(answerId, userId);
 		}
+		LOGGER.info(UnimitraConstants.DELETE_DISCUSSION + UnimitraConstants.COMPLETED
+				+ "questionId {}, answerId {}, userId {}, goupId {}", questionId, answerId, userId, groupId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -89,9 +98,11 @@ public class DiscussionServiceImpl implements DiscussionService {
 		int userId = discussionModel.getUserId();
 		boolean isDiscussionThreadActive = discussionModel.isDiscussionThreadActive();
 		int questionId = discussionModel.getQuestionId();
-		if (isUserStaff(userId)) {
-			discussionDao.closeQuestionThread(questionId, isDiscussionThreadActive);
+		if (!isUserStaff(userId)) {
+			throw new UnimitraException(ErrorCodes.USER_HAS_NO_ACCESS);
 		}
+		discussionDao.closeQuestionThread(questionId, isDiscussionThreadActive);
+		LOGGER.info(UnimitraConstants.CLOSE_THREAD + UnimitraConstants.COMPLETED + "{}", discussionModel.toString());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -101,27 +112,31 @@ public class DiscussionServiceImpl implements DiscussionService {
 		ResponseEntity<List<DiscussionModel>> response = null;
 		if (StringUtils.isNotEmpty(searchString) && StringUtils.isEmpty(category) && StringUtils.isEmpty(groupName)
 				&& ObjectUtils.isEmpty(userId)) {
-			
+
 			response = searchOnKeyword(searchString);
-			
+
 		} else if (StringUtils.isEmpty(searchString) && StringUtils.isNotEmpty(category)
 				&& StringUtils.isEmpty(groupName) && ObjectUtils.isEmpty(userId)) {
-			
+
 			response = searchOnCategory(category);
-			
+
 		} else if (StringUtils.isNotEmpty(searchString) && StringUtils.isEmpty(category)
 				&& StringUtils.isNotEmpty(groupName) && !ObjectUtils.isEmpty(userId)) {
-			
+
 			response = searchOnKeywordInGroup(searchString, groupName, userId);
-			
+
 		} else if (StringUtils.isEmpty(searchString) && StringUtils.isNotEmpty(category)
 				&& StringUtils.isNotEmpty(groupName) && !ObjectUtils.isEmpty(userId)) {
-			
+
 			response = searchOnCategoryInGroup(category, groupName, userId);
-			
+
 		} else {
 			throw new UnimitraException(ErrorCodes.INVALID_SEARCH_REQUEST);
 		}
+		LOGGER.info(
+				UnimitraConstants.SEARCH_DISCUSSION + UnimitraConstants.COMPLETED
+						+ "searchString {}, category {}, goupId {}, userId {}",
+				searchString, category, groupName, userId);
 		return response;
 	}
 
@@ -174,6 +189,8 @@ public class DiscussionServiceImpl implements DiscussionService {
 		if (discussionDao.getAnswerPosterUserId(answerId) == userId || isUserStaff(userId)) {
 			discussionDao.deleteAnswer(answerId);
 		} else {
+			LOGGER.info(UnimitraConstants.UNI_MITRA_ERROR + ErrorCodes.USER_HAS_NO_ACCESS + "answerId= {}, userId= {}",
+					answerId, userId);
 			throw new UnimitraException(ErrorCodes.USER_HAS_NO_ACCESS);
 		}
 	}
@@ -184,6 +201,9 @@ public class DiscussionServiceImpl implements DiscussionService {
 			discussionDao.deleteQuestion(questionId);
 			discussionDao.deletAllAnswersOfQuestion(questionId);
 		} else {
+			LOGGER.info(
+					UnimitraConstants.UNI_MITRA_ERROR + ErrorCodes.USER_HAS_NO_ACCESS + "questionId= {}, userId= {}",
+					questionId, userId);
 			throw new UnimitraException(ErrorCodes.USER_HAS_NO_ACCESS);
 		}
 	}
@@ -199,27 +219,25 @@ public class DiscussionServiceImpl implements DiscussionService {
 
 	private void checkIfPostAnswerIsPossible(AnswerModel answerModel) throws UnimitraException {
 		if (!discussionDao.getQuestionEntityFromQuestionId(answerModel.getQuestionId()).isDiscussionThreadActive()) {
+			LOGGER.info(UnimitraConstants.UNI_MITRA_ERROR + ErrorCodes.QUESTION_THREAD_INACTIVE + "questionId= {}",
+					answerModel.getQuestionId());
 			throw new UnimitraException(ErrorCodes.QUESTION_THREAD_INACTIVE);
 		}
 		if (!discussionDao.getQuestionEntityFromQuestionId(answerModel.getQuestionId()).isQuestionActive()) {
+			LOGGER.info(UnimitraConstants.UNI_MITRA_ERROR + ErrorCodes.QUESTION_NOT_PRESENT + "questionId= {}",
+					answerModel.getQuestionId());
 			throw new UnimitraException(ErrorCodes.QUESTION_NOT_PRESENT);
 		}
-		Integer groupId = discussionDao.getQuestionEntityFromQuestionId(answerModel.getQuestionId())
-				.getQuestionGroupId();
-		if (!ObjectUtils.isEmpty(groupId)) {
-			checkIfUserHasAccessToGroup(answerModel.getUserId(), groupId);
-			checkIfQuestionBelongsToGroup(answerModel.getQuestionId(), groupId);
-		}
-	}
-
-	private void checkIfQuestionBelongsToGroup(int questionId, int groupId) throws UnimitraException {
-		if (discussionDao.getQuestionEntityFromQuestionId(questionId).getQuestionGroupId() != groupId) {
-			throw new UnimitraException(ErrorCodes.QUESTION_NOT_PRESENT);
+		QuestionsEntity questionEntity = discussionDao.getQuestionEntityFromQuestionId(answerModel.getQuestionId());
+		if (!ObjectUtils.isEmpty(questionEntity.getQuestionGroupId())) {
+			checkIfUserHasAccessToGroup(answerModel.getUserId(), questionEntity.getQuestionGroupId());
 		}
 	}
 
 	private void checkIfUserHasAccessToGroup(int userId, int questionGroupId) throws UnimitraException {
 		if (!groupDao.checkIfUserHasAccessToGroup(userId, questionGroupId)) {
+			LOGGER.info(UnimitraConstants.UNI_MITRA_ERROR + ErrorCodes.USER_DOES_NOT_HAVE_ACCESS_TO_GROUP
+					+ "userId= {}, groupId= {}", userId, questionGroupId);
 			throw new UnimitraException(ErrorCodes.USER_DOES_NOT_HAVE_ACCESS_TO_GROUP);
 		}
 	}
