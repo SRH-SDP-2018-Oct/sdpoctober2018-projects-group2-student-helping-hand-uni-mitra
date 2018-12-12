@@ -60,7 +60,7 @@ public class GroupsController {
 
 	@PostMapping("/add-member")
 	public String addMemberToGroup(@RequestParam int userIdToAdd, @RequestParam String groupName,@RequestParam int loggedInUserId) throws UnimitraException {
-		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + "userId {}, groupName {}, loggedInUserId {}", userId, groupName,
+		LOGGER.info(UnimitraConstants.UNI_MITRA_AUDIT + "userId {}, groupName {}, loggedInUserId {}", userIdToAdd, groupName,
 				loggedInUserId);
     return groupService.addMemberToGroup(userIdToAdd, groupName, loggedInUserId);
 	}
