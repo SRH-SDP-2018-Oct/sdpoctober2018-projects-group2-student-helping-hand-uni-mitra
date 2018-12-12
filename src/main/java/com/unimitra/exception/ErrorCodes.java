@@ -54,4 +54,7 @@ public class ErrorCodes {
 	
 	public static final String USER_HAS_NO_ACCESS_FOR_JAPSER_REPORT = "UM1019 " + HttpStatus.UNAUTHORIZED.value()
 	+ ": You do not have access to generate Report. Only Staff members can generate Report.";
+	
+	public static final String USER_IS_NOT_AUTHORISED = "UM1020 " + HttpStatus.UNAUTHORIZED.value()
+	+ ": You are not authorised  to delete/edit the event.";
 }

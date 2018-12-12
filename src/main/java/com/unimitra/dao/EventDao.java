@@ -22,6 +22,6 @@ public interface EventDao {
 
 	EventsRegisterationEntity updateRegistrationFlag(EventsRegisterationEntity registerForEvent);
 
-	void updateExsistingRegistrationFlag(EventsRegisterationEntity eventsRegistrationEntity1);
+	EventsEntity updateEvent(EventsEntity editEvent) throws UnimitraException;
 
 }
