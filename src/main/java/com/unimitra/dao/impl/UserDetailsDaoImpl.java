@@ -15,7 +15,7 @@ import com.unimitra.utility.UnimitraUtility;
 
 @Repository
 public class UserDetailsDaoImpl implements UserDetailsDao {
-	public static final String USER_ID_FOR_QUERY="";
+	public static final String USERIDFORQUERY= "";
 	SessionFactory sessionFactory;
 
 	@Override
@@ -31,19 +31,19 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
 	public List<?> getUserAnswerDetails(int userId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<?>) session
-				.createQuery("select a.answerDescription,a.answerStatus \r\n"
+				.createQuery("select a.answerId,a.answerDescription,a.answerStatus \r\n"
 						+ "from UserDetailsEntity ud,AnswersEntity a \r\n"
-						+ "where ud.userId = a.answerPostedByUserId and ud.userId =: USER_ID_FOR_QUERY")
-				.setParameter("USER_ID_FOR_QUERY", userId).list();
+						+ "where ud.userId = a.answerPostedByUserId and ud.userId =: USERIDFORQUERY")
+				.setParameter("USERIDFORQUERY", userId).list();
 	}
 
 	@Override
 	public List<?> getUserQuestionDetails(int userId) {
 		Session session = sessionFactory.getCurrentSession();
 		return (List<?>) session
-				.createQuery("select q.questionDescription \r\n" + "from UserDetailsEntity ud,QuestionsEntity q \r\n"
-						+ "where ud.userId = q.questionPostedByUserId and ud.userId =: USER_ID_FOR_QUERY")
-				.setParameter("USER_ID_FOR_QUERY", userId).list();
+				.createQuery("select q.questionId,q.questionDescription \r\n" + "from UserDetailsEntity ud,QuestionsEntity q \r\n"
+						+ "where ud.userId = q.questionPostedByUserId and ud.userId =: USERIDFORQUERY")
+				.setParameter("USERIDFORQUERY", userId).list();
 
 	}
 
@@ -53,18 +53,18 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
 		return (List<?>) session.createQuery("select e.eventName \r\n"
 				+ "from UserDetailsEntity ud,EventsEntity e,EventsRegisterationEntity ev \r\n"
 				+ "where  e.eventId = ev.eventId and \r\n"
-				+ "ev.userId = ud.userId  and ud.userId =: USER_ID_FOR_QUERY and ev.eventRegistrationFlag= true and "
-				+ "e.eventIsActive = true").setParameter("USER_ID_FOR_QUERY", userId).list();
+				+ "ev.userId = ud.userId  and ud.userId =: USERIDFORQUERY and ev.eventRegistrationFlag= true and "
+				+ "e.eventIsActive = true").setParameter("USERIDFORQUERY", userId).list();
 	}
 
 	@Override
 	public List<?> getUserGroupDetails(int userId) {
 		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("select g.groupName\r\n"
+		return session.createQuery("select g.groupName \r\n"
 				+ "from UserDetailsEntity ud,GroupEntity g,GroupMemberEntity gm\r\n" + "where\r\n"
 				+ "gm.memberGroupId = g.groupId and\r\n"
-				+ "gm.memberUserId = ud.userId and ud.userId = : USER_ID_FOR_QUERY and gm.groupMemberIsActive = true and g.groupApprovalStatus = 'Approved'")
-				.setParameter("USER_ID_FOR_QUERY", userId).list();
+				+ "gm.memberUserId = ud.userId and ud.userId = : USERIDFORQUERY and gm.groupMemberIsActive = true and g.groupApprovalStatus = 'Approved'")
+				.setParameter("USERIDFORQUERY", userId).list();
 
 	}
 
