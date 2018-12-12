@@ -45,8 +45,8 @@ GroupService groupService;
 	}
 
 	@PostMapping("/decide-approval")
-	public String decideGroupStatus(@RequestBody GroupEntity groupEntity) {
-		return groupService.decideGroupService(groupEntity);
+	public String decideGroupStatus(@RequestBody GroupEntity groupEntity,@RequestParam int userId) {
+		return groupService.decideGroupService(groupEntity,userId);
 	}
 
 	@PostMapping("/add-member")

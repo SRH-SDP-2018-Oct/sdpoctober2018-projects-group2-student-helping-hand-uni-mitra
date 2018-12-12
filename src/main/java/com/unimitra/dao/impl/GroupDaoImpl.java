@@ -164,16 +164,16 @@ public class GroupDaoImpl implements GroupDao {
 	}
 
 	@Override
-	public String decideGroupStatus(GroupEntity groupEntity) {
+	public String decideGroupStatus(GroupEntity groupEntity,int userId) {
 
 		Session session = sessionFactory.getCurrentSession();
 		GroupEntity updateGroupData = session.get(GroupEntity.class, groupEntity.getGroupId());
-		if (updateGroupData.getGroupApprovalStatus().equals("Pending")) {
+		if (updateGroupData.getGroupApprovalStatus().equals("Pending") && updateGroupData.getGroupApprovalByUserId()== userId ) {
 			updateGroupData.setGroupApprovalStatus(groupEntity.getGroupApprovalStatus());
 			session.update(updateGroupData);
 			return "Group Status Updated";
 		}
-		return "Action already taken";
+		return "group is already approved or you dont have the permission to approve the group.";
 
 	}
 

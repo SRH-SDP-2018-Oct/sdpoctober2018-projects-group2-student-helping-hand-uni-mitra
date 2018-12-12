@@ -29,9 +29,9 @@ public class GroupServiceImpl implements GroupService {
 	GroupDao groupDao;
 
 	@Override
-	public String decideGroupService(GroupEntity groupEntity) {
+	public String decideGroupService(GroupEntity groupEntity,int userId) {
 
-		return groupDao.decideGroupStatus(groupEntity);
+		return groupDao.decideGroupStatus(groupEntity,userId);
 
 	}
 
