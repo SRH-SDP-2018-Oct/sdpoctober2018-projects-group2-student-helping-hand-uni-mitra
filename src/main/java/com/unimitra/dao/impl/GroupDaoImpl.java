@@ -29,7 +29,7 @@ public class GroupDaoImpl implements GroupDao {
 	SessionFactory sessionFactory;
 
 	@Override
-	public GroupEntity getGroupData(String groupName) throws UnimitraException {
+	public GroupEntity getGroupIdData(String groupName) throws UnimitraException {
 		Session session = sessionFactory.getCurrentSession();
 		@SuppressWarnings("unchecked")
 		List<GroupEntity> groupData = session.createQuery("from GroupEntity where groupName=:Name")

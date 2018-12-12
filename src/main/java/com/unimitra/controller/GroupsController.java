@@ -50,8 +50,8 @@ GroupService groupService;
 	}
 
 	@PostMapping("/add-member")
-	public String addMemberToGroup(@RequestParam int userId, @RequestParam String groupName,@RequestParam int loggedInUserId) throws UnimitraException {
-		return groupService.addMemberToGroup(userId, groupName, loggedInUserId);
+	public String addMemberToGroup(@RequestParam int userIdToAdd, @RequestParam String groupName,@RequestParam int loggedInUserId) throws UnimitraException {
+		return groupService.addMemberToGroup(userIdToAdd, groupName, loggedInUserId);
 	}
 
 	@DeleteMapping("/deleteGroup")
