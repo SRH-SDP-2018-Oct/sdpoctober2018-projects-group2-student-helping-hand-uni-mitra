@@ -74,7 +74,7 @@ public class DiscussionServiceImpl implements DiscussionService {
 	public ResponseEntity<String> delete(Integer questionId, Integer answerId, Integer userId, Integer groupId)
 			throws UnimitraException {
 		validateDeleteDiscussionRequest(questionId, answerId);
-		if (ObjectUtils.isEmpty(groupId)) {
+		if (!ObjectUtils.isEmpty(groupId)) {
 			checkIfUserHasAccessToGroup(userId, groupId);
 		}
 		if (!(ObjectUtils.isEmpty(questionId))) {
