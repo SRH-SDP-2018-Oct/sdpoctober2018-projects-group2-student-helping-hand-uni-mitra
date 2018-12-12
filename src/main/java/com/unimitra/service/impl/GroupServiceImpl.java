@@ -55,7 +55,6 @@ public class GroupServiceImpl implements GroupService {
 		if (groupsData.getGroupApprovalByUserId() != loggedInUserId) {
 			throw new UnimitraException(ErrorCodes.USER_HAS_NO_ACCESS_TO_ADD_MEMBER_TO_GROUP);
 		}
-
 	}
 
 	@SuppressWarnings("unchecked")
