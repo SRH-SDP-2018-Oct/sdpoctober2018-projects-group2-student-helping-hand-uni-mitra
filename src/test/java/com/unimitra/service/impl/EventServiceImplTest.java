@@ -42,7 +42,7 @@ public class EventServiceImplTest {
 		EventsEntity mockEventEntityFromDao = getMockEventEntityFromDAO();
 		when(eventDao.postEvent(eventEntity)).thenReturn(mockEventEntityFromDao);
 		EventsEntity actualEventEntity = eventsServiceImpl.postEvent(eventEntity);
-		assertEquals(expectedEventEntity, actualEventEntity);
+		assertEquals(expectedEventEntity.getEventDescription(), actualEventEntity.getEventDescription());
 	}
 
 	private EventsEntity getMockEventEntityFromDAO() {
